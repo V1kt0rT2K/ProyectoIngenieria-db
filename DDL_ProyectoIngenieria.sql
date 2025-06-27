@@ -76,9 +76,7 @@ CREATE TABLE users.tblUserRolesHistoric (
     CONSTRAINT fkUserRoleHistoric_Role 
     FOREIGN KEY (newRoleId) REFERENCES users.tblUserRoles(idRole),
     CONSTRAINT fkUserRoleHistoric_OldRole 
-    FOREIGN KEY (oldRoleId) REFERENCES users.tblUserRoles(idRole),
-    CONSTRAINT fkUserRoleHistoric_ChangedBy 
-    FOREIGN KEY (changedBy) REFERENCES users.tblUsers(idUser)
+    FOREIGN KEY (oldRoleId) REFERENCES users.tblUserRoles(idRole)
 );
 GO
 
