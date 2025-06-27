@@ -64,16 +64,34 @@ CREATE TABLE users.tblUsers(
     CONSTRAINT ukEmail UNIQUE(email)
 );
 
+-- CREATE TABLE users.tblUserRolesHistoric (
+--     idUserHistoric INTEGER PRIMARY KEY IDENTITY,
+--     idUser INTEGER NOT NULL,
+--     idRole INTEGER NOT NULL,
+--     generationDate DATETIME DEFAULT GETDATE(),
+--     description NVARCHAR(MAX),
+--     CONSTRAINT fkUserRoleHistoric_User
+--     FOREIGN KEY (idUser) REFERENCES users.tblUsers(idUser),
+--     CONSTRAINT fkUserRoleHistoric_Role
+--     FOREIGN KEY (idRole) REFERENCES users.tblUserRoles(idRole)
+-- );
+-- GO
+
 CREATE TABLE users.tblUserRolesHistoric (
     idUserHistoric INTEGER PRIMARY KEY IDENTITY,
     idUser INTEGER NOT NULL,
-    idRole INTEGER NOT NULL,
-    generationDate DATETIME DEFAULT GETDATE(),
+    oldRoleId INTEGER NOT NULL, 
+    newRoleId INTEGER NOT NULL, 
+    generationDate DATETIME DEFAULT GETDATE(), 
     description NVARCHAR(MAX),
-    CONSTRAINT fkUserRoleHistoric_User
+    CONSTRAINT fkUserRoleHistoric_User 
     FOREIGN KEY (idUser) REFERENCES users.tblUsers(idUser),
-    CONSTRAINT fkUserRoleHistoric_Role
-    FOREIGN KEY (idRole) REFERENCES users.tblUserRoles(idRole)
+    CONSTRAINT fkUserRoleHistoric_Role 
+    FOREIGN KEY (newRoleId) REFERENCES users.tblUserRoles(idRole),
+    CONSTRAINT fkUserRoleHistoric_OldRole 
+    FOREIGN KEY (oldRoleId) REFERENCES users.tblUserRoles(idRole),
+    CONSTRAINT fkUserRoleHistoric_ChangedBy 
+    FOREIGN KEY (changedBy) REFERENCES users.tblUsers(idUser)
 );
 GO
 
@@ -114,11 +132,11 @@ GO
 ------------INITIAL INSERTS--------------
 
 INSERT INTO asset.tblStatus(statusName, statusDescription)
-VALUES	('Aprobado','La solicitud fue revisada y aprobada con éxito.'),
-		('Revisión','La solicitud esta pendiente de revisión.'),
-		('Denegado','La solicitud fue revisada y denegado con éxito.');
+VALUES	('Aprobado','La solicitud fue revisada y aprobada con ï¿½xito.'),
+		('Revisiï¿½n','La solicitud esta pendiente de revisiï¿½n.'),
+		('Denegado','La solicitud fue revisada y denegado con ï¿½xito.');
 
 INSERT INTO users.tblUserRoles(roleName,roleDescription)
 VALUES	('Administrador', 'Usuario encargado de supervisar el sistema.'),
 		('Cajero', 'Usuario que realiza ventas en mostrador'),
-		('Encargado de Almacén','Usuario encargado de supervisar los ingresos y egresos de inventarios.');
+		('Encargado de Almacï¿½n','Usuario encargado de supervisar los ingresos y egresos de inventarios.');
