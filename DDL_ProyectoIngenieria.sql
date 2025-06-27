@@ -64,19 +64,6 @@ CREATE TABLE users.tblUsers(
     CONSTRAINT ukEmail UNIQUE(email)
 );
 
--- CREATE TABLE users.tblUserRolesHistoric (
---     idUserHistoric INTEGER PRIMARY KEY IDENTITY,
---     idUser INTEGER NOT NULL,
---     idRole INTEGER NOT NULL,
---     generationDate DATETIME DEFAULT GETDATE(),
---     description NVARCHAR(MAX),
---     CONSTRAINT fkUserRoleHistoric_User
---     FOREIGN KEY (idUser) REFERENCES users.tblUsers(idUser),
---     CONSTRAINT fkUserRoleHistoric_Role
---     FOREIGN KEY (idRole) REFERENCES users.tblUserRoles(idRole)
--- );
--- GO
-
 CREATE TABLE users.tblUserRolesHistoric (
     idUserHistoric INTEGER PRIMARY KEY IDENTITY,
     idUser INTEGER NOT NULL,
