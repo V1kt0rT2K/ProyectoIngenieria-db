@@ -5,10 +5,10 @@ GO
 USE ProyectoIngenieria;
 GO
 
-CREATE LOGIN UserProyectoIngenieria WITH PASSWORD = 'LOSFABULOSOSCADILLAC11',
-CHECK_POLICY = OFF,
-CHECK_EXPIRATION = OFF;
-GO
+--CREATE LOGIN UserProyectoIngenieria WITH PASSWORD = 'LOSFABULOSOSCADILLAC11',
+--CHECK_POLICY = OFF,
+--CHECK_EXPIRATION = OFF;
+--GO
 
 CREATE USER UserProyectoIngenieria FOR LOGIN UserProyectoIngenieria;
 EXEC sp_addrolemember N'db_owner', N'UserProyectoIngenieria';
@@ -21,13 +21,49 @@ GO
 CREATE SCHEMA asset;
 GO
 
+CREATE SCHEMA stock;
+GO
+
+CREATE SCHEMA supply;
+GO
+
+CREATE SCHEMA sales;
+GO
+
+CREATE SCHEMA orders;
+GO
+
 ---------------TABLES----------------
 
 ------------  ASSET --------------------
+
+CREATE TABLE asset.tblStatusTypes(
+	idStatusType INTEGER PRIMARY KEY IDENTITY,
+	statusTypeName NVARCHAR(MAX) NOT NULL
+);
+
 CREATE TABLE asset.tblStatus(
 	idStatus INTEGER PRIMARY KEY IDENTITY,
 	statusName NVARCHAR(MAX) NOT NULL,
-	statusDescription NVARCHAR(MAX) NOT NULL
+	statusDescription NVARCHAR(MAX) NOT NULL,
+	idStatusType INTEGER NOT NULL,
+	CONSTRAINT fkStatus_StatusType
+	FOREIGN KEY (idStatusType) REFERENCES asset.tblStatusTypes(idStatusType)
+);
+
+CREATE TABLE asset.tblStageTypes(
+    idStageType INTEGER PRIMARY KEY IDENTITY,
+	stageTypeName NVARCHAR(MAX) NOT NULL,
+	description NVARCHAR(MAX) NOT NULL
+);
+
+CREATE TABLE asset.tblStages(
+    idStage INTEGER PRIMARY KEY IDENTITY,
+	stageName NVARCHAR(MAX) NOT NULL,
+	description NVARCHAR(MAX) NOT NULL,
+	idStageType INTEGER NOT NULL,
+	CONSTRAINT fkStage_StageType
+	FOREIGN KEY (idStageType) REFERENCES asset.tblStageTypes(idStageType)
 );
 
 -------------USERS-----------------------
@@ -45,7 +81,8 @@ CREATE TABLE users.tblPersons(
 CREATE TABLE users.tblUserRoles(
 	idRole INTEGER PRIMARY KEY IDENTITY,
 	roleName NVARCHAR(MAX) NOT NULL,
-	roleDescription NVARCHAR(MAX) NOT NULL
+	roleDescription NVARCHAR(MAX) NOT NULL,
+	show BIT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE users.tblUsers(
@@ -112,16 +149,200 @@ CREATE TABLE users.tblUserDataHistoric (
 );
 GO
 
+----------STOCK---------------
+
+CREATE TABLE stock.tblSwineBatches(
+    idSwineBatch INTEGER PRIMARY KEY IDENTITY,
+	swineQuantityRemaining INTEGER NOT NULL,
+	estimatedWeight DECIMAL(4,2) NOT NULL,
+	generationDate DATETIME DEFAULT GETDATE(),
+	idStage INTEGER NOT NULL,
+	CONSTRAINT fkSwineBatch_Stage
+	FOREIGN KEY (idStage) REFERENCES asset.tblStages(idStage),
+);
+
+CREATE TABLE stock.tblSwine(
+    idSwine INTEGER PRIMARY KEY IDENTITY,
+	numberAssigned NVARCHAR(MAX) NOT NULL,
+	idSwineBatch INTEGER NOT NULL,
+	isProcessed BIT NOT NULL DEFAULT 0,
+	CONSTRAINT fkSwine_SwineBatch
+	FOREIGN KEY (idSwineBatch) REFERENCES stock.tblSwineBatches(idSwineBatch),
+);
+
+CREATE TABLE stock.tblSwineCutTypes(
+    idSwineCutType INTEGER PRIMARY KEY IDENTITY,
+	swineCutTypeName NVARCHAR(MAX) NOT NULL,
+	description NVARCHAR(MAX),
+);
+
+CREATE TABLE stock.tblSwineCutBatches(
+    idAvaliableSwineCut INTEGER PRIMARY KEY IDENTITY,
+	quantity INTEGER NOT NULL,
+	idSwineCutType INTEGER NOT NULL,
+	expirationDate DATE NOT NULL,
+	isEmpty BIT NOT NULL DEFAULT 0,
+	CONSTRAINT fkSwineCutBatch_SwineCutType
+	FOREIGN KEY (idSwineCutType) REFERENCES stock.tblSwineCutTypes(idSwineCutType),
+);
+
+CREATE TABLE stock.tblSwineCutProduction(
+    idSwineCutProduction INTEGER PRIMARY KEY IDENTITY,
+	idSwine INTEGER NOT NULL,
+	quantity INTEGER NOT NULL,
+	idSwineCutType INTEGER NOT NULL,
+	processDate  DATETIME DEFAULT GETDATE(),
+	CONSTRAINT fkSwineCutProduction_Swine
+	FOREIGN KEY (idSwine) REFERENCES stock.tblSwine(idSwine),
+	CONSTRAINT fkSwineCutProduction_SwineCutType
+	FOREIGN KEY (idSwineCutType) REFERENCES stock.tblSwineCutTypes(idSwineCutType),
+);
+
+CREATE TABLE stock.tblFeeds(
+    idFeed INTEGER PRIMARY KEY IDENTITY,
+	feedName NVARCHAR(MAX) NOT NULL,
+	idStage INTEGER NOT NULL,
+	CONSTRAINT fkFeeds_Stage
+	FOREIGN KEY (idStage) REFERENCES asset.tblStages(idStage),
+);
+GO
 
 
-------------INITIAL INSERTS--------------
+------SUPPLY---------
 
-INSERT INTO asset.tblStatus(statusName, statusDescription)
-VALUES	('Aprobado','La solicitud fue revisada y aprobada con �xito.'),
-		('Revisi�n','La solicitud esta pendiente de revisi�n.'),
-		('Denegado','La solicitud fue revisada y denegado con �xito.');
+CREATE TABLE supply.tblVaccineTypes(
+    idVaccineType INTEGER PRIMARY KEY IDENTITY,
+	vaccineName NVARCHAR(MAX) NOT NULL,
+	description NVARCHAR(MAX)
+);
 
-INSERT INTO users.tblUserRoles(roleName,roleDescription)
-VALUES	('Administrador', 'Usuario encargado de supervisar el sistema.'),
-		('Cajero', 'Usuario que realiza ventas en mostrador'),
-		('Encargado de Almac�n','Usuario encargado de supervisar los ingresos y egresos de inventarios.');
+CREATE TABLE supply.tblVaccines(
+    idVaccine INTEGER PRIMARY KEY IDENTITY,
+	vaccineName NVARCHAR(MAX) NOT NULL,
+	idVaccineType INTEGER NOT NULL,
+	idStage INTEGER NOT NULL,
+	CONSTRAINT fkVaccine_VaccineType
+	FOREIGN KEY (idVaccineType) REFERENCES supply.tblVaccineTypes(idVaccineType),
+	CONSTRAINT fkVaccine_Stage
+	FOREIGN KEY (idStage) REFERENCES asset.tblStages(idStage)
+);
+
+CREATE TABLE supply.tblVaccineBatches(
+    idVaccineBatch INTEGER PRIMARY KEY IDENTITY,
+	quantity INTEGER NOT NULL,
+	idVaccine INTEGER NOT NULL,
+	expirationDate DATE NOT NULL,
+	isEmpty BIT NOT NULL DEFAULT 0,
+	CONSTRAINT fkVaccineBatch_Vaccine
+	FOREIGN KEY (idVaccine) REFERENCES supply.tblVaccines(idVaccine),
+);
+
+CREATE TABLE supply.tblSwineVaccines(
+    idSwineVaccine INTEGER PRIMARY KEY IDENTITY,
+	generationDate DATETIME DEFAULT GETDATE(),
+	idSwineBatch INTEGER NOT NULL,
+	quantityUsed INTEGER NOT NULL,
+	idVaccineBatch INTEGER NOT NULL,
+	idUser INTEGER NOT NULL,
+	CONSTRAINT fkMedicalRecord_SwineBatch
+	FOREIGN KEY (idSwineBatch) REFERENCES stock.tblSwineBatches(idSwineBatch),
+	CONSTRAINT fkMedicalRecord_VaccineBatch
+	FOREIGN KEY (idVaccineBatch) REFERENCES supply.tblVaccineBatches(idVaccineBatch),
+	CONSTRAINT fkMedicalRecord_User
+	FOREIGN KEY (idUser) REFERENCES users.tblUsers(idUser),
+);
+
+CREATE TABLE supply.tblFeedBatches(
+    idFeedBatch INTEGER PRIMARY KEY IDENTITY,
+	idFeed INTEGER NOT NULL,
+	quantity INTEGER NOT NULL,
+	expirationDate DATE NOT NULL,
+	CONSTRAINT fkFeedBatch_Feed
+	FOREIGN KEY (idFeed) REFERENCES stock.tblFeeds(idFeed),
+);
+
+CREATE TABLE supply.tblSwineFeeds(
+    idSwineFeed INTEGER PRIMARY KEY IDENTITY,
+	generationDate DATETIME NOT NULL DEFAULT GETDATE(),
+	idSwineBatch INTEGER NOT NULL,
+	quantityUsed DECIMAL(4,2) NOT NULL,
+	idFeedBatch INTEGER NOT NULL,
+	idUser INTEGER NOT NULL,
+	CONSTRAINT fkSwineFeed_SwineBatch
+	FOREIGN KEY (idSwineBatch) REFERENCES stock.tblSwineBatches(idSwineBatch),
+	CONSTRAINT fkSwineFeed_FeedBatch
+	FOREIGN KEY (idFeedBatch) REFERENCES supply.tblFeedBatches(idFeedBatch),
+	CONSTRAINT fkSwineFeed_User
+	FOREIGN KEY (idUser) REFERENCES users.tblUsers(idUser),
+);
+GO
+
+-------------SALES-----------------
+
+CREATE TABLE sales.tblStockPrices(
+    idStockPrice INTEGER PRIMARY KEY IDENTITY,
+	idSwineCutType INTEGER NOT NULL,
+	priceUnit DECIMAL(4,2) NOT NULL,
+	CONSTRAINT fkStockPrice_SwineCutType
+	FOREIGN KEY (idSwineCutType) REFERENCES stock.tblSwineCutTypes(idSwineCutType),
+);
+
+CREATE TABLE sales.tblClients(
+    idClient INTEGER PRIMARY KEY IDENTITY,
+	identityNumber NVARCHAR(13) NOT NULL,
+	CONSTRAINT ukIdentityNumber UNIQUE(identityNumber),
+);
+
+CREATE TABLE sales.tblSalesChecks(
+    idSalesCheck INTEGER PRIMARY KEY IDENTITY,
+	generationDate DATETIME NOT NULL DEFAULT GETDATE(),
+	idUser INTEGER NOT NULL,
+	subTotal DECIMAL(8,2) NOT NULL,
+	ISV NVARCHAR(MAX) NOT NULL,
+	idClient INTEGER,
+	CONSTRAINT fkSalesCheck_User
+	FOREIGN KEY (idUser) REFERENCES users.tblUsers(idUser),
+	CONSTRAINT fkSalesCheck_Client
+	FOREIGN KEY (idClient) REFERENCES sales.tblClients(idClient),
+);
+
+CREATE TABLE sales.tblSalesChecksDetails(
+    idSalesCheckDetail INTEGER PRIMARY KEY IDENTITY,
+	idSalesCheck INTEGER NOT NULL,
+	idSwineCutType INTEGER NOT NULL,
+	quantity DECIMAL(8,2) NOT NULL,
+	CONSTRAINT fkSalesChecksDetail_SalesCheck
+	FOREIGN KEY (idSalesCheck) REFERENCES sales.tblSalesChecks(idSalesCheck),
+	CONSTRAINT fkSalesChecksDetail_SwineCutType
+	FOREIGN KEY (idSwineCutType) REFERENCES stock.tblSwineCutTypes(idSwineCutType),
+);
+
+CREATE TABLE sales.tblCaiCodes(
+	idCaiCode INTEGER PRIMARY KEY IDENTITY,
+	code NVARCHAR(MAX) NOT NULL,
+	establishmentRTN NVARCHAR(MAX) NOT NULL
+);
+
+CREATE TABLE sales.tblCaiCodeRanges(
+    idCaiCodeRange INTEGER PRIMARY KEY IDENTITY,
+	idCaiCode INTEGER NOT NULL,
+	startRange INTEGER NOT NULL,
+	endRange INTEGER NOT NULL,
+	expirationDate DATE NOT NULL,
+	isActive BIT NOT NULL DEFAULT 1,
+	CONSTRAINT fkCaiCodeRange_CaiCode
+	FOREIGN KEY (idCaiCode) REFERENCES sales.tblCaiCodes(idCaiCode)
+);
+
+CREATE TABLE sales.tblCaiCodeCheck(
+    idCaiCodeCheck INTEGER PRIMARY KEY IDENTITY,
+	idCaiCode INTEGER NOT NULL,
+	idSalesCheck INTEGER NOT NULL,
+	saleCheckCode NVARCHAR(MAX) NOT NULL,
+	CONSTRAINT fkCaiCodeCheck_CaiCode
+	FOREIGN KEY (idCaiCode) REFERENCES sales.tblCaiCodes(idCaiCode),
+	CONSTRAINT fkCaiCodeCheck_SalesCheck
+	FOREIGN KEY (idSalesCheck) REFERENCES sales.tblSalesChecks(idSalesCheck),
+);
+
+
