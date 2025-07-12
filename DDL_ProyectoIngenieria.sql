@@ -154,7 +154,7 @@ GO
 CREATE TABLE stock.tblSwineBatches(
     idSwineBatch INTEGER PRIMARY KEY IDENTITY,
 	swineQuantityRemaining INTEGER NOT NULL,
-	estimatedWeight DECIMAL(4,2) NOT NULL,
+	estimatedWeight DECIMAL(10,2) NOT NULL,
 	generationDate DATETIME DEFAULT GETDATE(),
 	idStage INTEGER NOT NULL,
 	CONSTRAINT fkSwineBatch_Stage
@@ -177,8 +177,8 @@ CREATE TABLE stock.tblSwineCutTypes(
 );
 
 CREATE TABLE stock.tblSwineCutBatches(
-    idAvaliableSwineCut INTEGER PRIMARY KEY IDENTITY,
-	quantity INTEGER NOT NULL,
+    idSwineCutBatch INTEGER PRIMARY KEY IDENTITY,
+	quantity DECIMAL(8,2) NOT NULL,
 	idSwineCutType INTEGER NOT NULL,
 	expirationDate DATE NOT NULL,
 	isEmpty BIT NOT NULL DEFAULT 0,
@@ -189,7 +189,7 @@ CREATE TABLE stock.tblSwineCutBatches(
 CREATE TABLE stock.tblSwineCutProduction(
     idSwineCutProduction INTEGER PRIMARY KEY IDENTITY,
 	idSwine INTEGER NOT NULL,
-	quantity INTEGER NOT NULL,
+	quantity DECIMAL(8,2) NOT NULL,
 	idSwineCutType INTEGER NOT NULL,
 	processDate  DATETIME DEFAULT GETDATE(),
 	CONSTRAINT fkSwineCutProduction_Swine
@@ -198,21 +198,11 @@ CREATE TABLE stock.tblSwineCutProduction(
 	FOREIGN KEY (idSwineCutType) REFERENCES stock.tblSwineCutTypes(idSwineCutType),
 );
 
-CREATE TABLE stock.tblFeeds(
-    idFeed INTEGER PRIMARY KEY IDENTITY,
-	feedName NVARCHAR(MAX) NOT NULL,
-	idStage INTEGER NOT NULL,
-	CONSTRAINT fkFeeds_Stage
-	FOREIGN KEY (idStage) REFERENCES asset.tblStages(idStage),
-);
-GO
-
-
 ------SUPPLY---------
 
 CREATE TABLE supply.tblVaccineTypes(
     idVaccineType INTEGER PRIMARY KEY IDENTITY,
-	vaccineName NVARCHAR(MAX) NOT NULL,
+	vaccineTypeName NVARCHAR(MAX) NOT NULL,
 	description NVARCHAR(MAX)
 );
 
@@ -252,20 +242,29 @@ CREATE TABLE supply.tblSwineVaccines(
 	FOREIGN KEY (idUser) REFERENCES users.tblUsers(idUser),
 );
 
+CREATE TABLE supply.tblFeeds(
+    idFeed INTEGER PRIMARY KEY IDENTITY,
+	feedName NVARCHAR(MAX) NOT NULL,
+	idStage INTEGER NOT NULL,
+	CONSTRAINT fkFeed_Stage
+	FOREIGN KEY (idStage) REFERENCES asset.tblStages(idStage),
+);
+GO
+
 CREATE TABLE supply.tblFeedBatches(
     idFeedBatch INTEGER PRIMARY KEY IDENTITY,
 	idFeed INTEGER NOT NULL,
-	quantity INTEGER NOT NULL,
+	quantity DECIMAL(8,2) NOT NULL,
 	expirationDate DATE NOT NULL,
 	CONSTRAINT fkFeedBatch_Feed
-	FOREIGN KEY (idFeed) REFERENCES stock.tblFeeds(idFeed),
+	FOREIGN KEY (idFeed) REFERENCES supply.tblFeeds(idFeed),
 );
 
 CREATE TABLE supply.tblSwineFeeds(
     idSwineFeed INTEGER PRIMARY KEY IDENTITY,
 	generationDate DATETIME NOT NULL DEFAULT GETDATE(),
 	idSwineBatch INTEGER NOT NULL,
-	quantityUsed DECIMAL(4,2) NOT NULL,
+	quantityUsed DECIMAL(8,2) NOT NULL,
 	idFeedBatch INTEGER NOT NULL,
 	idUser INTEGER NOT NULL,
 	CONSTRAINT fkSwineFeed_SwineBatch
@@ -282,7 +281,7 @@ GO
 CREATE TABLE sales.tblStockPrices(
     idStockPrice INTEGER PRIMARY KEY IDENTITY,
 	idSwineCutType INTEGER NOT NULL,
-	priceUnit DECIMAL(4,2) NOT NULL,
+	priceUnit DECIMAL(8,2) NOT NULL,
 	CONSTRAINT fkStockPrice_SwineCutType
 	FOREIGN KEY (idSwineCutType) REFERENCES stock.tblSwineCutTypes(idSwineCutType),
 );
@@ -309,12 +308,12 @@ CREATE TABLE sales.tblSalesChecks(
 CREATE TABLE sales.tblSalesChecksDetails(
     idSalesCheckDetail INTEGER PRIMARY KEY IDENTITY,
 	idSalesCheck INTEGER NOT NULL,
-	idSwineCutType INTEGER NOT NULL,
+	idSwineCutBatch INTEGER NOT NULL,
 	quantity DECIMAL(8,2) NOT NULL,
 	CONSTRAINT fkSalesChecksDetail_SalesCheck
 	FOREIGN KEY (idSalesCheck) REFERENCES sales.tblSalesChecks(idSalesCheck),
-	CONSTRAINT fkSalesChecksDetail_SwineCutType
-	FOREIGN KEY (idSwineCutType) REFERENCES stock.tblSwineCutTypes(idSwineCutType),
+	CONSTRAINT fkSalesChecksDetail_SwineCutBatch
+	FOREIGN KEY (idSwineCutBatch) REFERENCES stock.tblSwineCutBatches(idSwineCutBatch),
 );
 
 CREATE TABLE sales.tblCaiCodes(
@@ -326,8 +325,8 @@ CREATE TABLE sales.tblCaiCodes(
 CREATE TABLE sales.tblCaiCodeRanges(
     idCaiCodeRange INTEGER PRIMARY KEY IDENTITY,
 	idCaiCode INTEGER NOT NULL,
-	startRange INTEGER NOT NULL,
-	endRange INTEGER NOT NULL,
+	startRange NVARCHAR(MAX) NOT NULL,
+	endRange NVARCHAR(MAX) NOT NULL,
 	expirationDate DATE NOT NULL,
 	isActive BIT NOT NULL DEFAULT 1,
 	CONSTRAINT fkCaiCodeRange_CaiCode
