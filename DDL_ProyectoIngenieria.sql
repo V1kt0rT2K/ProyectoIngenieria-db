@@ -1,6 +1,6 @@
 
-CREATE DATABASE ProyectoIngenieria;
-GO
+--CREATE DATABASE ProyectoIngenieria;
+--GO
 
 USE ProyectoIngenieria;
 GO
@@ -10,9 +10,9 @@ GO
 --CHECK_EXPIRATION = OFF;
 --GO
 
-CREATE USER UserProyectoIngenieria FOR LOGIN UserProyectoIngenieria;
-EXEC sp_addrolemember N'db_owner', N'UserProyectoIngenieria';
-GO
+--CREATE USER UserProyectoIngenieria FOR LOGIN UserProyectoIngenieria;
+--EXEC sp_addrolemember N'db_owner', N'UserProyectoIngenieria';
+--GO
 
 ------- SCHEMAS --------
 CREATE SCHEMA users;
@@ -186,10 +186,10 @@ CREATE TABLE stock.tblSwineCutBatches(
 	FOREIGN KEY (idSwineCutType) REFERENCES stock.tblSwineCutTypes(idSwineCutType),
 );
 
-CREATE TABLE stock.tblSwineCutProduction(
+CREATE TABLE stock.tblSwineCutProductions(
     idSwineCutProduction INTEGER PRIMARY KEY IDENTITY,
 	idSwine INTEGER NOT NULL,
-	quantity DECIMAL(8,2) NOT NULL,
+	quantity DECIMAL(8,2) NOT NULL,	
 	idSwineCutType INTEGER NOT NULL,
 	processDate  DATETIME DEFAULT GETDATE(),
 	CONSTRAINT fkSwineCutProduction_Swine
@@ -278,6 +278,23 @@ GO
 
 -------------SALES-----------------
 
+CREATE TABLE sales.tblCaiCodes(
+	idCaiCode INTEGER PRIMARY KEY IDENTITY,
+	code NVARCHAR(MAX) NOT NULL,
+	establishmentRTN NVARCHAR(MAX) NOT NULL
+);
+
+CREATE TABLE sales.tblCaiCodeRanges(
+    idCaiCodeRange INTEGER PRIMARY KEY IDENTITY,
+	idCaiCode INTEGER NOT NULL,
+	startRange NVARCHAR(MAX) NOT NULL,
+	endRange NVARCHAR(MAX) NOT NULL,
+	expirationDate DATE NOT NULL,
+	isActive BIT NOT NULL DEFAULT 1,
+	CONSTRAINT fkCaiCodeRange_CaiCode
+	FOREIGN KEY (idCaiCode) REFERENCES sales.tblCaiCodes(idCaiCode)
+);
+
 CREATE TABLE sales.tblStockPrices(
     idStockPrice INTEGER PRIMARY KEY IDENTITY,
 	idSwineCutType INTEGER NOT NULL,
@@ -297,12 +314,16 @@ CREATE TABLE sales.tblSalesChecks(
 	generationDate DATETIME NOT NULL DEFAULT GETDATE(),
 	idUser INTEGER NOT NULL,
 	subTotal DECIMAL(8,2) NOT NULL,
-	ISV NVARCHAR(MAX) NOT NULL,
+	ISV DECIMAL(8,2) NOT NULL,
 	idClient INTEGER,
+	idCaiCodeRange INTEGER NOT NULL,
+	saleCheckCode NVARCHAR(MAX) NOT NULL,
 	CONSTRAINT fkSalesCheck_User
 	FOREIGN KEY (idUser) REFERENCES users.tblUsers(idUser),
 	CONSTRAINT fkSalesCheck_Client
 	FOREIGN KEY (idClient) REFERENCES sales.tblClients(idClient),
+	CONSTRAINT fkSalesCheck_CaiCodeRange
+	FOREIGN KEY (idCaiCodeRange) REFERENCES sales.tblCaiCodeRanges(idCaiCodeRange)
 );
 
 CREATE TABLE sales.tblSalesChecksDetails(
@@ -316,32 +337,8 @@ CREATE TABLE sales.tblSalesChecksDetails(
 	FOREIGN KEY (idSwineCutBatch) REFERENCES stock.tblSwineCutBatches(idSwineCutBatch),
 );
 
-CREATE TABLE sales.tblCaiCodes(
-	idCaiCode INTEGER PRIMARY KEY IDENTITY,
-	code NVARCHAR(MAX) NOT NULL,
-	establishmentRTN NVARCHAR(MAX) NOT NULL
-);
 
-CREATE TABLE sales.tblCaiCodeRanges(
-    idCaiCodeRange INTEGER PRIMARY KEY IDENTITY,
-	idCaiCode INTEGER NOT NULL,
-	startRange NVARCHAR(MAX) NOT NULL,
-	endRange NVARCHAR(MAX) NOT NULL,
-	expirationDate DATE NOT NULL,
-	isActive BIT NOT NULL DEFAULT 1,
-	CONSTRAINT fkCaiCodeRange_CaiCode
-	FOREIGN KEY (idCaiCode) REFERENCES sales.tblCaiCodes(idCaiCode)
-);
 
-CREATE TABLE sales.tblCaiCodeCheck(
-    idCaiCodeCheck INTEGER PRIMARY KEY IDENTITY,
-	idCaiCode INTEGER NOT NULL,
-	idSalesCheck INTEGER NOT NULL,
-	saleCheckCode NVARCHAR(MAX) NOT NULL,
-	CONSTRAINT fkCaiCodeCheck_CaiCode
-	FOREIGN KEY (idCaiCode) REFERENCES sales.tblCaiCodes(idCaiCode),
-	CONSTRAINT fkCaiCodeCheck_SalesCheck
-	FOREIGN KEY (idSalesCheck) REFERENCES sales.tblSalesChecks(idSalesCheck),
-);
+
 
 

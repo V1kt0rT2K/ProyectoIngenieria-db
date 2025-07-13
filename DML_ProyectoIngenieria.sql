@@ -85,7 +85,7 @@ SELECT ROUND(1 + RAND(idSwineCutType)*29, 2), idSwineCutType, DATEADD(DAY, FLOOR
 FROM stock.tblSwineCutTypes;
 GO
 
-INSERT INTO stock.tblSwineCutProduction(idSwine,idSwineCutType,quantity)
+INSERT INTO stock.tblSwineCutProductions(idSwine,idSwineCutType,quantity)
 SELECT 15, sct.idSwineCutType, ROUND(1 + RAND(sct.idSwineCutType)*15, 2)
 FROM stock.tblSwineCutTypes AS sct;
 GO
@@ -159,6 +159,14 @@ VALUES	(5,1,1,12.2),
 		(13,2,1,15.3);
 GO
 
+INSERT INTO sales.tblCaiCodes(code,establishmentRTN)
+VALUES	('35DB45-58RFG5-34DF3R-23KGT5-98UIP4-2A','2711-5621-12281');
+GO
+
+INSERT INTO sales.tblCaiCodeRanges(idCaiCode,startRange,endRange,expirationDate)
+VALUES	(1,'000-007-01-00000056','000-007-01-00000065', DATEADD(MONTH,1,GETDATE()));
+GO
+
 INSERT INTO sales.tblStockPrices(idSwineCutType,priceUnit)
 SELECT idSwineCutType, ROUND((10 + RAND(idSwineCutType)*20),2)
 FROM stock.tblSwineCutTypes;
@@ -168,11 +176,11 @@ INSERT INTO sales.tblClients(identityNumber)
 VALUES	('0801198300332'),
 		('0715200100923');
 
-INSERT INTO sales.tblSalesChecks(idUser,subTotal,ISV,idClient)
-VALUES	(1,32982,1231,1),
-		(1,43221,442,1),
-		(1,3242,1141,2),
-		(1,999,1341,2);
+INSERT INTO sales.tblSalesChecks(idUser,subTotal,ISV,idClient, idCaiCodeRange, saleCheckCode)
+VALUES	(1,32982,1231,1, 1,'000-007-01-00000056'),
+		(1,43221,442,1, 1 , '000-007-01-00000057'),
+		(1,3242,1141,2, 1 , '000-007-01-00000058'),
+		(1,999,1341,2, 1 , '000-007-01-00000059');
 GO
 
 INSERT INTO sales.tblSalesChecksDetails(idSalesCheck,idSwineCutBatch,quantity)
@@ -185,22 +193,6 @@ VALUES	(1,4,19.2),
 		(3,11,19.2),
 		(4,10,19.2);
 GO
-
-INSERT INTO sales.tblCaiCodes(code,establishmentRTN)
-VALUES	('35DB45-58RFG5-34DF3R-23KGT5-98UIP4-2A','2711-5621-12281');
-GO
-
-INSERT INTO sales.tblCaiCodeRanges(idCaiCode,startRange,endRange,expirationDate)
-VALUES	(1,'000-007-01-00000056','000-007-01-00000065', DATEADD(MONTH,1,GETDATE()));
-GO
-
-INSERT INTO sales.tblCaiCodeCheck(idCaiCode,idSalesCheck,saleCheckCode)
-VALUES	(1,1,'000-007-01-00000056'),
-		(1,2,'000-007-01-00000057'),
-		(1,3,'000-007-01-00000058'),
-		(1,4,'000-007-01-00000059');
-GO
-
 
 
 
