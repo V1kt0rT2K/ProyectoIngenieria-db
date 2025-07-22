@@ -54,7 +54,7 @@ CREATE TABLE asset.tblStatus(
 CREATE TABLE asset.tblStageTypes(
     idStageType INTEGER PRIMARY KEY IDENTITY,
 	stageTypeName NVARCHAR(MAX) NOT NULL,
-	stageDescription NVARCHAR(MAX) NOT NULL
+	stageTypeDescription NVARCHAR(MAX) NOT NULL
 );
 
 CREATE TABLE asset.tblStages(
