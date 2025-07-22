@@ -1,59 +1,53 @@
 USE ProyectoIngenieria;
 GO
 
--- Deshabilitar restricciones de clave foránea temporalmente
+-- Deshabilitar restricciones momentáneamente para evitar errores
 EXEC sp_MSforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL';
 GO
 
--- Eliminar tablas en orden inverso a su creación para evitar problemas de dependencias
+-- Eliminar tablas en orden inverso a sus dependencias
 
--- Tablas de sales
-DROP TABLE IF EXISTS sales.tblCaiCodeRanges;
-DROP TABLE IF EXISTS sales.tblCaiCodes;
+-- 1. Tablas con más dependencias (más "hijas") primero
+DROP TABLE IF EXISTS orders.tblSupplyPurcharseDetails;
 DROP TABLE IF EXISTS sales.tblSalesChecksDetails;
-DROP TABLE IF EXISTS sales.tblSalesChecks;
-DROP TABLE IF EXISTS sales.tblClients;
-DROP TABLE IF EXISTS sales.tblStockPrices;
-
--- Tablas de supply
-DROP TABLE IF EXISTS supply.tblSwineFeeds;
-DROP TABLE IF EXISTS supply.tblFeedBatches;
-DROP TABLE IF EXISTS supply.tblFeeds;
-DROP TABLE IF EXISTS supply.tblSwineVaccines;
-DROP TABLE IF EXISTS supply.tblVaccineBatches;
-DROP TABLE IF EXISTS supply.tblVaccines;
-DROP TABLE IF EXISTS supply.tblVaccineTypes;
-
--- Tablas de stock
-DROP TABLE IF EXISTS stock.tblSwineCutProductions;
-DROP TABLE IF EXISTS stock.tblSwineCutBatches;
-DROP TABLE IF EXISTS stock.tblSwineCutTypes;
-DROP TABLE IF EXISTS stock.tblSwine;
-DROP TABLE IF EXISTS stock.tblSwineBatches;
-
--- Tablas de users
+DROP TABLE IF EXISTS supply.tblSwineSupplies;
+DROP TABLE IF EXISTS supply.tblSupplyBatches;
+DROP TABLE IF EXISTS stock.tblProductions;
+DROP TABLE IF EXISTS stock.tblProductBatches;
 DROP TABLE IF EXISTS users.tblUserDataHistoric;
 DROP TABLE IF EXISTS users.tblUserRequests;
 DROP TABLE IF EXISTS users.tblUserRolesHistoric;
+
+-- 2. Tablas intermedias
+DROP TABLE IF EXISTS orders.tblSupplyPurcharses;
+DROP TABLE IF EXISTS sales.tblSalesChecks;
+DROP TABLE IF EXISTS sales.tblCaiCodeRanges;
+DROP TABLE IF EXISTS supply.tblSupplies;
+DROP TABLE IF EXISTS stock.tblSwineBatches;
+DROP TABLE IF EXISTS stock.tblProducts;
 DROP TABLE IF EXISTS users.tblUsers;
+
+-- 3. Tablas principales (más "padres")
+DROP TABLE IF EXISTS sales.tblClients;
+DROP TABLE IF EXISTS sales.tblCaiCodes;
+DROP TABLE IF EXISTS orders.tblProviders;
+DROP TABLE IF EXISTS supply.tblSuppliesType;
+DROP TABLE IF EXISTS asset.tblStages;
+DROP TABLE IF EXISTS asset.tblStatus;
 DROP TABLE IF EXISTS users.tblUserRoles;
 DROP TABLE IF EXISTS users.tblPersons;
-
--- Tablas de asset
-DROP TABLE IF EXISTS asset.tblStages;
 DROP TABLE IF EXISTS asset.tblStageTypes;
-DROP TABLE IF EXISTS asset.tblStatus;
 DROP TABLE IF EXISTS asset.tblStatusTypes;
 
--- Eliminar esquemas
-DROP SCHEMA IF EXISTS sales;
+-- Volver a habilitar restricciones
+EXEC sp_MSforeachtable 'ALTER TABLE ? CHECK CONSTRAINT ALL';
+GO
+
+-- Eliminar esquemas (opcional, si también quieres eliminarlos)
 DROP SCHEMA IF EXISTS orders;
+DROP SCHEMA IF EXISTS sales;
 DROP SCHEMA IF EXISTS supply;
 DROP SCHEMA IF EXISTS stock;
 DROP SCHEMA IF EXISTS asset;
 DROP SCHEMA IF EXISTS users;
-GO
-
--- Volver a habilitar restricciones de clave foránea
-EXEC sp_MSforeachtable 'ALTER TABLE ? CHECK CONSTRAINT ALL';
 GO
