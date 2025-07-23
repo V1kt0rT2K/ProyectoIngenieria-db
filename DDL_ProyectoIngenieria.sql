@@ -5,7 +5,7 @@
 USE ProyectoIngenieria;
 GO
 
---CREATE LOGIN UserProyectoIngenieria WITH PASSWORD = 'LOSFABULOSOSCADILLAC11',
+--CREATE LOGIN UserProyectoIngenieria WITH PASSWORD = 'LOSFA	BULOSOSCADILLAC11',
 --CHECK_POLICY = OFF,
 --CHECK_EXPIRATION = OFF;
 --GO
@@ -163,7 +163,7 @@ CREATE TABLE stock.tblSwineBatches(
 );
 
 CREATE TABLE stock.tblProducts(
-	idProduct INTEGER PRIMARY KEY,
+	idProduct INTEGER PRIMARY KEY IDENTITY,
 	productName NVARCHAR(MAX) NOT NULL,
 	productDescription NVARCHAR(MAX) NOT NULL,
 	price DECIMAL(10,2) NOT NULL,
@@ -174,13 +174,13 @@ CREATE TABLE stock.tblProductBatches(
 	idProductBatch INTEGER PRIMARY KEY IDENTITY,
 	idProduct INTEGER NOT NULL,
 	expirationDate DATE NOT NULL,
-	stockQuantity DECIMAL(8,2)
+	stockQuantity DECIMAL(8,2) NOT NULL
 	CONSTRAINT fkProductBatch_Product 
 	FOREIGN KEY (idProduct) REFERENCES stock.tblProducts(idProduct)
 );
 
 CREATE TABLE stock.tblProductions(
-	idProduction INTEGER PRIMARY KEY,
+	idProduction INTEGER PRIMARY KEY IDENTITY,
 	idSwineBatch INTEGER NOT NULL,
 	idProduct INTEGER NOT NULL,
 	quantity DECIMAL(8,2) NOT NULL
@@ -192,7 +192,7 @@ CREATE TABLE stock.tblProductions(
 
 ------SUPPLY---------
 
-CREATE TABLE supply.tblSuppliesType(
+CREATE TABLE supply.tblSupplyTypes(
 	idSupplyType INTEGER PRIMARY KEY IDENTITY,
 	nameSupplyType NVARCHAR(MAX) NOT NULL
 );
@@ -204,13 +204,13 @@ CREATE TABLE supply.tblSupplies(
 	idSupplyType INTEGER NOT NULL,
 	orderPoint DECIMAL(8,2) NOT NULL,
 	CONSTRAINT fkSupply_SupplyType
-	FOREIGN KEY(idSupplyType) REFERENCES supply.tblSuppliesType(idSupplyType),
+	FOREIGN KEY(idSupplyType) REFERENCES supply.tblSupplyTypes(idSupplyType),
 	CONSTRAINT fkSupply_Stage
 	FOREIGN KEY (idStage) REFERENCES asset.tblStages(idStage)
 );
 
 CREATE TABLE supply.tblSupplyBatches(
-	idSupplyBatch INTEGER PRIMARY KEY,
+	idSupplyBatch INTEGER PRIMARY KEY IDENTITY,
 	idSupply INTEGER NOT NULL,
 	quantity DECIMAL(8,2) NOT NULL,
 	expirationDate DATE NOT NULL,
@@ -222,7 +222,7 @@ CREATE TABLE supply.tblSwineSupplies(
 	idSwineSupply INTEGER PRIMARY KEY IDENTITY,
 	idSupply INTEGER NOT NULL,
 	idSwineBatch INTEGER NOT NULL,
-	quantity DECIMAL(8,2) NOT NULL,
+	quantity DECIMAL(8,2) NOT NULL,	
 	generationDate DATE DEFAULT GETDATE(),
 	idUser INTEGER NOT NULL,
 	CONSTRAINT fkSwineSupply_Supply

@@ -31,7 +31,7 @@ DROP TABLE IF EXISTS users.tblUsers;
 DROP TABLE IF EXISTS sales.tblClients;
 DROP TABLE IF EXISTS sales.tblCaiCodes;
 DROP TABLE IF EXISTS orders.tblProviders;
-DROP TABLE IF EXISTS supply.tblSuppliesType;
+DROP TABLE IF EXISTS supply.tblSupplyTypes;
 DROP TABLE IF EXISTS asset.tblStages;
 DROP TABLE IF EXISTS asset.tblStatus;
 DROP TABLE IF EXISTS users.tblUserRoles;
