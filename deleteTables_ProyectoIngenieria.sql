@@ -34,10 +34,13 @@ DROP TABLE IF EXISTS orders.tblProviders;
 DROP TABLE IF EXISTS supply.tblSupplyTypes;
 DROP TABLE IF EXISTS asset.tblStages;
 DROP TABLE IF EXISTS asset.tblStatus;
+DROP TABLE IF EXISTS users.tblActionRoles;
 DROP TABLE IF EXISTS users.tblUserRoles;
 DROP TABLE IF EXISTS users.tblPersons;
 DROP TABLE IF EXISTS asset.tblStageTypes;
 DROP TABLE IF EXISTS asset.tblStatusTypes;
+DROP TABLE IF EXISTS asset.tblActions;
+
 
 -- Volver a habilitar restricciones
 EXEC sp_MSforeachtable 'ALTER TABLE ? CHECK CONSTRAINT ALL';

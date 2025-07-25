@@ -37,6 +37,14 @@ GO
 
 ------------  ASSET --------------------
 
+CREATE TABLE asset.tblActions(
+	idAction INTEGER PRIMARY KEY IDENTITY,
+	actionName NVARCHAR(255) NOT NULL,
+	actionDescription NVARCHAR(255),
+	CONSTRAINT ukAction
+	UNIQUE(actionName)
+);
+
 CREATE TABLE asset.tblStatusTypes(
 	idStatusType INTEGER PRIMARY KEY IDENTITY,
 	statusTypeName NVARCHAR(MAX) NOT NULL
@@ -148,6 +156,18 @@ CREATE TABLE users.tblUserDataHistoric (
     FOREIGN KEY (idUser) REFERENCES users.tblUsers(idUser)
 );
 GO
+
+CREATE TABLE users.tblActionRoles(
+	idActionRole INTEGER PRIMARY KEY IDENTITY,
+	idRole INTEGER NOT NULL,
+	idAction INTEGER NOT NULL,
+	CONSTRAINT fkActionRoles_Role
+	FOREIGN KEY (idRole) REFERENCES users.tblUserRoles(idRole),
+	CONSTRAINT fkActionRoles_Action
+	FOREIGN KEY (idAction) REFERENCES asset.tblActions(idAction),
+	CONSTRAINT ukAction_Role
+	UNIQUE (idRole,idAction)
+);
 
 ----------STOCK---------------
 

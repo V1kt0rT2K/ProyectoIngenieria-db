@@ -32,7 +32,8 @@ VALUES	('Pre-Inicio','Fase neonatal desde el nacimiento hasta el destete (0-21 d
 GO
 
 INSERT INTO users.tblUserRoles(roleName,roleDescription, show)
-VALUES	('Administrador', 'Usuario encargado de supervisar el sistema.' , 0),
+VALUES	('SYSADMIN', 'Desarrollador' , 0),
+		('Administrador', 'Usuario encargado de supervisar el sistema.' , 0),
 		('Cajero', 'Usuario que realiza ventas en mostrador', 1),
 		('Encargado de Almacén','Usuario encargado de supervisar los ingresos y egresos de inventarios.', 1);
 GO
@@ -42,11 +43,15 @@ GO
 
 INSERT INTO users.tblPersons(identityNumber,firstName,secondName,lastName,secondLastName)
 VALUES	('0715200500005','VIKTOR', 'ANDRE','HERNANDEZ', 'VELASQUEZ'),
-		('0801198508594','FULANO', 'DETAL','HERNANDEZ', 'VELASQUEZ');
+		('0801198508594','MARIA', 'GONZALEZ','HERNANDEZ', 'VELASQUEZ'),
+		('0801198502131','JUAN', 'MANUEL','MENGANO', 'VELASQUEZ'),
+		('0801198534423','FULANO', 'DETAL','HERNANDEZ', 'VELASQUEZ');
 
 INSERT INTO users.tblUsers(email,job,password,isEnabled,idPerson,idRole)
-VALUES	('viktor.hernandez@gmail.com','GERENTE', 'contrasena', 1,1,1),
-		('fulano@gmail.com','CAJERO', '123456@F', 0,2,2);
+VALUES	('viktor.hernandez@gmail.com','SYSADMIN', 'cdcb7422ca0fe077931b84e6fb7e6dfb7d6678dc7e9ae9c4335e98edc7d5761a', 1,1,1),
+		('administrador@gmail.com','ADMINISTRADOR', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 1,2,2),
+		('cajero@gmail.com','CAJERO', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 1,3,3),
+		('almacen@gmail.com','ENCARGADO DE ALMACEN', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 1,4,4);
 GO
 
 INSERT INTO users.tblUserRolesHistoric(idUser, oldRoleId, newRoleId)
