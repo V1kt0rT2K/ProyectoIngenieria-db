@@ -9,10 +9,10 @@ VALUES	('Estados de Solicitud'),
 GO
 
 INSERT INTO asset.tblStatus(statusName, statusDescription, idStatusType)
-VALUES	('Aprobado','La solicitud fue revisada y aprobada con éxito.', 1),
-		('Revisión','La solicitud esta pendiente de revisión.', 1),
-		('Denegado','La solicitud fue revisada y denegado con éxito.',1),
-		('En Camino','La orden de compra fue realizada y se esta esperando la recepción.',2),
+VALUES	('Aprobado','La solicitud fue revisada y aprobada con Ã©xito.', 1),
+		('RevisiÃ³n','La solicitud esta pendiente de revisiÃ³n.', 1),
+		('Denegado','La solicitud fue revisada y denegado con Ã©xito.',1),
+		('En Camino','La orden de compra fue realizada y se esta esperando la recepciÃ³n.',2),
 		('Por Ingresar','La orden de compra fue recibida y se debe ingresar al sistema.',2),
 		('Ingresado','La orden de compra fue ingresada al sistema.',2);
 
@@ -24,18 +24,18 @@ GO
 
 
 INSERT INTO asset.tblStages(stageName, stageDescription,idStageType)
-VALUES	('Pre-Inicio','Fase neonatal desde el nacimiento hasta el destete (0-21 días). Cuidados intensivos en temperatura y alimentación líquida.', 1),
-		('Inicio','Periodo post-destete (21-63 días). Adaptación a alimento sólido, desarrollo del sistema digestivo e inmunitario.', 1),
-		('Crecimiento','Etapa de rápido desarrollo muscular (63-112 días). Máxima eficiencia alimenticia y crecimiento óseo.', 1),
-		('Desarrollo','Fase de terminación (112-168 días). Maduración tisular y consolidación del crecimiento.', 1),
-		('Engorde','Periodo final de acabado (>168 días). Acumulación de grasa intramuscular y preparación para mercado.', 1);
+VALUES	('Pre-Inicio','Fase neonatal desde el nacimiento hasta el destete (0-21 dÃ­as). Cuidados intensivos en temperatura y alimentaciÃ³n lÃ­quida.', 1),
+		('Inicio','Periodo post-destete (21-63 dÃ­as). AdaptaciÃ³n a alimento sÃ³lido, desarrollo del sistema digestivo e inmunitario.', 1),
+		('Crecimiento','Etapa de rÃ¡pido desarrollo muscular (63-112 dÃ­as). MÃ¡xima eficiencia alimenticia y crecimiento Ã³seo.', 1),
+		('Desarrollo','Fase de terminaciÃ³n (112-168 dÃ­as). MaduraciÃ³n tisular y consolidaciÃ³n del crecimiento.', 1),
+		('Engorde','Periodo final de acabado (>168 dÃ­as). AcumulaciÃ³n de grasa intramuscular y preparaciÃ³n para mercado.', 1);
 GO
 
 INSERT INTO users.tblUserRoles(roleName,roleDescription, show)
 VALUES	('SYSADMIN', 'Desarrollador' , 0),
 		('Administrador', 'Usuario encargado de supervisar el sistema.' , 0),
 		('Cajero', 'Usuario que realiza ventas en mostrador', 1),
-		('Encargado de Almacén','Usuario encargado de supervisar los ingresos y egresos de inventarios.', 1);
+		('Encargado de AlmacÃ©n','Usuario encargado de supervisar los ingresos y egresos de inventarios.', 1);
 GO
 
 
@@ -65,23 +65,23 @@ VALUES	(1,2,1,'VIKTOR HERNANDEZ','viktor.hernandez@gmail.com', 'GERENTE'),
 GO
 ----------- TEST INSERTS -----------
 
-INSERT INTO stock.tblSwineBatches(quantity,estimatedWeight,idStage, stockQuantity)
-VALUES	(10,200.8,2, 5),
-		(9,185.3,5, 9);
+INSERT INTO stock.tblSwineBatches(quantity,birthDate,idStage, stockQuantity)
+VALUES	(10,'2025-07-25 00:31:45.853',2, 5),
+		(9,'2025-07-25 00:31:45.853',5, 9);
 GO
 
 INSERT INTO stock.tblProducts(productName,productDescription, price, orderPoint)
 VALUES	('Cabeza', 'Incluye orejas, morro, cachetes y cabeza completa para caldos o barbacoa', 200, 5),
 		('Lomo', 'Corte magro y tierno, ideal para chuletas, filetes o asar entero', 29, 5),
 		('Costilla', 'Incluye las costillas (chuletas) con hueso, para parrilla o ahumados', 37, 5),
-		('Pierna', 'También llamada jamón, usado para asar, curar o hacer jamones serranos', 56, 5),
-		('Paleta', 'Parte delantera similar al jamón pero con más grasa intramuscular', 11, 5),
-		('Panceta', 'También llamado tocino o bacon (curado), parte ventral del cerdo', 23, 5),
-		('Chuletón', 'Corte premium del lomo alto con hueso', 24, 5),
-		('Solomillo', 'Corte más tierno y valioso, pequeño y magro', 78, 5),
-		('Espaldilla', 'Corte económico de la parte superior delantera', 50, 5),
+		('Pierna', 'TambiÃ©n llamada jamÃ³n, usado para asar, curar o hacer jamones serranos', 56, 5),
+		('Paleta', 'Parte delantera similar al jamÃ³n pero con mÃ¡s grasa intramuscular', 11, 5),
+		('Panceta', 'TambiÃ©n llamado tocino o bacon (curado), parte ventral del cerdo', 23, 5),
+		('ChuletÃ³n', 'Corte premium del lomo alto con hueso', 24, 5),
+		('Solomillo', 'Corte mÃ¡s tierno y valioso, pequeÃ±o y magro', 78, 5),
+		('Espaldilla', 'Corte econÃ³mico de la parte superior delantera', 50, 5),
 		('Rabo', 'Usado principalmente para guisos y caldos', 11, 7),
-		('Chicharrón', 'Piel de cerdo frita o asada', 20, 5),
+		('ChicharrÃ³n', 'Piel de cerdo frita o asada', 20, 5),
 		('Cerdo', 'Unidad de cerdo entero para la venta.', 1000, 5);
 GO
 
@@ -109,42 +109,42 @@ GO
 
 INSERT INTO supply.tblSupplies(nameSupply,idSupplyType,idStage, orderPoint)
 VALUES
-     --Vacunas para Pre-Inicio (0-21 días)
-    ('Ivermectina neonatal', 1, 1, 5),          -- Tipo: Parásitos
-    ('Complejo vitamínico ADE', 2, 1, 5),       -- Tipo: Vitaminas
-    ('Desparasitante lactante', 1, 1, 5),       -- Tipo: Parásitos
-     --Vacunas para Inicio (21-63 días)
-    ('Levamisol crecimiento', 1, 2, 5),         -- Tipo: Parásitos
+     --Vacunas para Pre-Inicio (0-21 dÃ­as)
+    ('Ivermectina neonatal', 1, 1, 5),          -- Tipo: ParÃ¡sitos
+    ('Complejo vitamÃ­nico ADE', 2, 1, 5),       -- Tipo: Vitaminas
+    ('Desparasitante lactante', 1, 1, 5),       -- Tipo: ParÃ¡sitos
+     --Vacunas para Inicio (21-63 dÃ­as)
+    ('Levamisol crecimiento', 1, 2, 5),         -- Tipo: ParÃ¡sitos
     ('Vitamina B12 + Hierro', 2, 2, 5),         -- Tipo: Vitaminas
-    ('Anti-coccidiosico', 1, 2, 5),             -- Tipo: Parásitos
-     --Vacunas para Crecimiento (63-112 días)
-    ('Dexametasona vitamínica', 2, 3, 5),       -- Tipo: Vitaminas
-    ('Antihelmíntico broad-spectrum', 1, 3, 5), -- Tipo: Parásitos
+    ('Anti-coccidiosico', 1, 2, 5),             -- Tipo: ParÃ¡sitos
+     --Vacunas para Crecimiento (63-112 dÃ­as)
+    ('Dexametasona vitamÃ­nica', 2, 3, 5),       -- Tipo: Vitaminas
+    ('AntihelmÃ­ntico broad-spectrum', 1, 3, 5), -- Tipo: ParÃ¡sitos
     ('Complejo B inyectable', 2, 3, 5),         -- Tipo: Vitaminas
-     --Vacunas para Desarrollo (112-168 días)
+     --Vacunas para Desarrollo (112-168 dÃ­as)
     ('Vitamina E + Selenio', 2, 4, 5),          -- Tipo: Vitaminas
-    ('Fenbendazol oral', 1, 4, 5),              -- Tipo: Parásitos
-    ('Aminoácidos esenciales', 2, 4, 5),        -- Tipo: Vitaminas
-     --Vacunas para Engorde (>168 días)
-    ('Desparasitante pre-sacrificio', 1, 5, 5), -- Tipo: Parásitos
-    ('Vitamina K antihemorrágica', 2, 5, 5),    -- Tipo: Vitaminas
+    ('Fenbendazol oral', 1, 4, 5),              -- Tipo: ParÃ¡sitos
+    ('AminoÃ¡cidos esenciales', 2, 4, 5),        -- Tipo: Vitaminas
+     --Vacunas para Engorde (>168 dÃ­as)
+    ('Desparasitante pre-sacrificio', 1, 5, 5), -- Tipo: ParÃ¡sitos
+    ('Vitamina K antihemorrÃ¡gica', 2, 5, 5),    -- Tipo: Vitaminas
     ('Minerales quelados', 2, 5, 5),            -- Tipo: Vitaminas
 	------CONCENTRADO-----
 	('Leche maternizada premium',3 , 1, 5),
-    ('Pre-starter 22% proteína',3, 1, 5),
-    ('Suplemento vitamínico lactante',3, 1, 5),
-    ('Starter 20% proteína',3, 2, 5),
-    ('Dieta post-destete probiótica',3, 2, 5),
-    ('Crecimiento inicial 18% proteína',3, 2, 5),
-    ('Dieta crecimiento 16% proteína',3, 3, 5),
-    ('Mix energético maíz-soja',3, 3, 5),
+    ('Pre-starter 22% proteÃ­na',3, 1, 5),
+    ('Suplemento vitamÃ­nico lactante',3, 1, 5),
+    ('Starter 20% proteÃ­na',3, 2, 5),
+    ('Dieta post-destete probiÃ³tica',3, 2, 5),
+    ('Crecimiento inicial 18% proteÃ­na',3, 2, 5),
+    ('Dieta crecimiento 16% proteÃ­na',3, 3, 5),
+    ('Mix energÃ©tico maÃ­z-soja',3, 3, 5),
     ('Suplemento mineral crecimiento',3, 3, 5),
-    ('Dieta desarrollo 14% proteína',3, 4, 5),
-    ('Alto rendimiento terminación',3, 4, 5),
+    ('Dieta desarrollo 14% proteÃ­na',3, 4, 5),
+    ('Alto rendimiento terminaciÃ³n',3, 4, 5),
     ('Fibra control desarrollo',3, 4, 5),
-    ('Dieta acabado 12% proteína',3, 5, 5),
+    ('Dieta acabado 12% proteÃ­na',3, 5, 5),
     ('Mezcla pre-mercado grasa intramuscular',3, 5, 5),
-    ('Suplemento finalización',3, 5, 5);
+    ('Suplemento finalizaciÃ³n',3, 5, 5);
 GO
 
 INSERT INTO supply.tblSupplyBatches(idSupply, quantity,expirationDate)
