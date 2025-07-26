@@ -174,7 +174,7 @@ CREATE TABLE users.tblActionRoles(
 CREATE TABLE stock.tblSwineBatches(
     idSwineBatch INTEGER PRIMARY KEY IDENTITY,
 	quantity INTEGER NOT NULL,
-	estimatedWeight DECIMAL(10,2) NOT NULL,
+	birthDate DATETIME NOT NULL,
 	generationDate DATETIME DEFAULT GETDATE(),
 	idStage INTEGER NOT NULL,
 	stockQuantity INTEGER NOT NULL,
