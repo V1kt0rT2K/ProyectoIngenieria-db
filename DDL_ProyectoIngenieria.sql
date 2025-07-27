@@ -70,8 +70,23 @@ CREATE TABLE asset.tblStages(
 	stageName NVARCHAR(MAX) NOT NULL,
 	stageDescription NVARCHAR(MAX) NOT NULL,
 	idStageType INTEGER NOT NULL,
+	stageTime INTEGER NOT NULL,
 	CONSTRAINT fkStage_StageType
 	FOREIGN KEY (idStageType) REFERENCES asset.tblStageTypes(idStageType)
+);
+
+--CREATE TABLE asset.tblNotificationTemplates(
+	
+--);
+
+CREATE TABLE asset.tblNotifications(
+	idNotification INTEGER PRIMARY KEY IDENTITY,
+	message NVARCHAR(MAX) NOT NULL,
+	generationDate DATETIME NOT NULL DEFAULT GETDATE(),
+	show BIT NOT NULL DEFAULT 1,
+	idUser INTEGER NOT NULL 
+	--CONSTRAINT fkNotification_User
+	--FOREIGN KEY (idUser) REFERENCES users.tblUsers
 );
 
 -------------USERS-----------------------
@@ -130,7 +145,7 @@ CREATE TABLE users.tblUserRequests (
     idUser INTEGER NOT NULL,
     generationDate DATETIME NOT NULL DEFAULT GETDATE(),
     idRole INTEGER NOT NULL,
-    idStatus INTEGER NOT NULL,
+    idStatus INTEGER NOT NULL DEFAULT 2,
     userName NVARCHAR(MAX) NOT NULL,
     email NVARCHAR(MAX) NOT NULL,
     job NVARCHAR(MAX) NOT NULL,
@@ -194,21 +209,25 @@ CREATE TABLE stock.tblProductBatches(
 	idProductBatch INTEGER PRIMARY KEY IDENTITY,
 	idProduct INTEGER NOT NULL,
 	expirationDate DATE NOT NULL,
-	stockQuantity DECIMAL(8,2) NOT NULL
+	stockQuantity DECIMAL(8,2) NOT NULL,
+	idSwineBatch INTEGER NOT NULL,
+	entryQuantity DECIMAL(8,2) NOT NULL,
+	CONSTRAINT fkProductBatch_SwineBatch
+	FOREIGN KEY (idSwineBatch) REFERENCES stock.tblSwineBatches(idSwineBatch),
 	CONSTRAINT fkProductBatch_Product 
 	FOREIGN KEY (idProduct) REFERENCES stock.tblProducts(idProduct)
 );
 
-CREATE TABLE stock.tblProductions(
-	idProduction INTEGER PRIMARY KEY IDENTITY,
-	idSwineBatch INTEGER NOT NULL,
-	idProduct INTEGER NOT NULL,
-	quantity DECIMAL(8,2) NOT NULL
-	CONSTRAINT fk_Production_SwineBatch
-	FOREIGN KEY (idSwineBatch) REFERENCES stock.tblSwineBatches (idSwineBatch),
-	CONSTRAINT fk_Production_Product
-	FOREIGN KEY (idProduct) REFERENCES stock.tblProducts (idProduct)
-);
+--CREATE TABLE stock.tblProductions(
+--	idProduction INTEGER PRIMARY KEY IDENTITY,
+--	idSwineBatch INTEGER NOT NULL,
+--	idProduct INTEGER NOT NULL,
+--	quantity DECIMAL(8,2) NOT NULL
+--	CONSTRAINT fk_Production_SwineBatch
+--	FOREIGN KEY (idSwineBatch) REFERENCES stock.tblSwineBatches (idSwineBatch),
+--	CONSTRAINT fk_Production_Product
+--	FOREIGN KEY (idProduct) REFERENCES stock.tblProducts (idProduct)
+--);
 
 ------SUPPLY---------
 
@@ -223,6 +242,7 @@ CREATE TABLE supply.tblSupplies(
 	idStage  INTEGER NOT NULL,
 	idSupplyType INTEGER NOT NULL,
 	orderPoint DECIMAL(8,2) NOT NULL,
+	price DECIMAL(8,2) NOT NULL
 	CONSTRAINT fkSupply_SupplyType
 	FOREIGN KEY(idSupplyType) REFERENCES supply.tblSupplyTypes(idSupplyType),
 	CONSTRAINT fkSupply_Stage
@@ -273,8 +293,11 @@ CREATE TABLE sales.tblCaiCodeRanges(
 
 CREATE TABLE sales.tblClients(
     idClient INTEGER PRIMARY KEY IDENTITY,
-	identityNumber NVARCHAR(13) NOT NULL,
-	CONSTRAINT ukIdentityNumber UNIQUE(identityNumber),
+	identification NVARCHAR(50) NOT NULL,
+	fullName NVARCHAR(MAX),
+	contact NVARCHAR(MAX),
+	address NVARCHAR(MAX),
+	CONSTRAINT ukIdentityNumber UNIQUE(identification),
 );
 
 CREATE TABLE sales.tblSalesChecks(
@@ -318,11 +341,11 @@ CREATE TABLE orders.tblProviders(
 CREATE TABLE orders.tblSupplyPurcharses(
 	idSupplyPurcharse INTEGER PRIMARY KEY IDENTITY,
 	idUser INTEGER NOT NULL,
-	generationDate DATE NOT NULL,
+	generationDate DATE NOT NULL DEFAULT GETDATE(),
 	subTotal DECIMAL(8,2) NOT NULL,
 	idProvider INTEGER NOT NULL,
 	ISV DECIMAL(8,2) NOT NULL, 
-	idStatus INTEGER NOT NULL,
+	idStatus INTEGER NOT NULL DEFAULT 2,
 	CONSTRAINT fkSupplyPurcharse_User
 	FOREIGN KEY (idUser) REFERENCES users.tblUsers(idUser),
 	CONSTRAINT fkSupplyPurcharse_Provider
@@ -332,7 +355,7 @@ CREATE TABLE orders.tblSupplyPurcharses(
 );
 
 CREATE TABLE orders.tblSupplyPurcharseDetails(
-	idSupplyPurcharseDetail INTEGER PRIMARY KEY,
+	idSupplyPurcharseDetail INTEGER PRIMARY KEY IDENTITY,
 	idSupplyPurcharse INTEGER NOT NULL,
 	idSupply INTEGER NOT NULL,
 	quantity DECIMAL(8,2) NOT NULL,
@@ -341,5 +364,27 @@ CREATE TABLE orders.tblSupplyPurcharseDetails(
 	CONSTRAINT fkSupplyPurcharseDetail_SupplyPurcharse
 	FOREIGN KEY (idSupplyPurcharse) REFERENCES orders.tblSupplyPurcharses(idSupplyPurcharse)
 );
+
+GO
+---------------------------------- TRIGGERS -------------------------------------
+
+----PRODUCT BATCHES----
+--CREATE OR ALTER TRIGGER stock.trgSendNotificationForProductOrderPoint
+--ON stock.tblProductBatches
+--AFTER UPDATE
+--AS
+--BEGIN
+--	SELECT * FROM inserted;
+	
+--END
+
+
+
+
+
+
+
+
+
 
 

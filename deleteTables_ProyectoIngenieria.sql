@@ -17,6 +17,7 @@ DROP TABLE IF EXISTS stock.tblProductBatches;
 DROP TABLE IF EXISTS users.tblUserDataHistoric;
 DROP TABLE IF EXISTS users.tblUserRequests;
 DROP TABLE IF EXISTS users.tblUserRolesHistoric;
+DROP TABLE IF EXISTS asset.tblNotifications;
 
 -- 2. Tablas intermedias
 DROP TABLE IF EXISTS orders.tblSupplyPurcharses;
