@@ -16,6 +16,7 @@ VALUES	('Aprobado','La solicitud fue revisada y aprobada con éxito.', 1),
 		('En Camino','La orden de compra fue realizada y se esta esperando la recepción.',2),
 		('Por Ingresar','La orden de compra fue recibida y se debe ingresar al sistema.',2),
 		('Ingresado','La orden de compra fue ingresada al sistema.',2),
+		('Cancelado', 'La orden de compra fue cancelada', 2),
 		('Pendiente','El pedido esta pendiente para su entrega.',3),
 		('Entregado','El pedido fue entregado.',3);
 
@@ -43,6 +44,11 @@ VALUES	('Administrador', 'Usuario encargado de supervisar el sistema.' , 0),
 		('Operador de Granja', 'Usuario que realiza la gestión con los lotes de cerdos.' , 1)
 GO
 
+
+INSERT INTO asset.tblActions(actionName)
+VALUES	('getAllUsers'),
+		('searchUsers'),
+		('updateUser');
 
 --------USERS INSERTS ----------
 
@@ -158,12 +164,12 @@ VALUES
     ('Suplemento finalización',3, 5, 5, 43);
 GO
 
-INSERT INTO supply.tblSupplyBatches(idSupply, quantity,expirationDate)
+INSERT INTO supply.tblSupplyBatches(idSupply, stockQuantity,expirationDate)
 SELECT idSupply, FLOOR(1 + RAND(idSupply)*10), DATEADD(DAY, FLOOR(1 + RAND(idSupply)*29) , GETDATE())
 FROM supply.tblSupplies;
 GO
 
-INSERT INTO supply.tblSupplyBatches(idSupply, quantity,expirationDate)
+INSERT INTO supply.tblSupplyBatches(idSupply, stockQuantity,expirationDate)
 SELECT TOP 3 idSupply, FLOOR(1 + RAND(idSupply)*10), DATEADD(DAY, FLOOR(1 + RAND(idSupply)*29) , GETDATE())
 FROM supply.tblSupplies;
 GO
@@ -215,11 +221,11 @@ VALUES ('TecnoImport S.A.', '0801-2010-12345', 'contacto@tecnoimport.hn', 'ETC')
 		('CargoExpress Honduras', '1001-2015-45678', 'servicio@cargoexpress.hn', 'ETC');
 GO
 
-INSERT INTO orders.tblSupplyPurcharses(idUser, subTotal,idProvider,ISV,idStatus)
-VALUES	(1,1000, 1, 231, 1),
-		(1,9000, 3, 931, 1),
-		(1,1500, 2, 23, 4),
-		(4,2000, 1, 211, 5);
+INSERT INTO orders.tblSupplyPurcharses(idUser, subTotal,idProvider,ISV,idStatus, idFormerSupplyPurcharse)
+VALUES	(1,1000, 1, 231, 1, null),
+		(1,9000, 3, 931, 1, null),
+		(1,1500, 2, 23, 4, null),
+		(4,2000, 1, 211, 5, 3);
 GO
 
 -- Detalles para la Compra 1 (idSupplyPurcharse = 1)

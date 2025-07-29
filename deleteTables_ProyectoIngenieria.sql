@@ -42,6 +42,7 @@ DROP TABLE IF EXISTS asset.tblStageTypes;
 DROP TABLE IF EXISTS asset.tblStatusTypes;
 DROP TABLE IF EXISTS asset.tblActions;
 
+--DROP TRIGGER IF EXISTS asset.trgAddSysAdminPermissions;
 
 -- Volver a habilitar restricciones
 EXEC sp_MSforeachtable 'ALTER TABLE ? CHECK CONSTRAINT ALL';

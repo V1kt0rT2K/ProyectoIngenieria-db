@@ -252,7 +252,7 @@ CREATE TABLE supply.tblSupplies(
 CREATE TABLE supply.tblSupplyBatches(
 	idSupplyBatch INTEGER PRIMARY KEY IDENTITY,
 	idSupply INTEGER NOT NULL,
-	quantity DECIMAL(8,2) NOT NULL,
+	stockQuantity DECIMAL(8,2) NOT NULL,
 	expirationDate DATE NOT NULL,
 	CONSTRAINT fkSupplyBatch_Supply
 	FOREIGN KEY (idSupply) REFERENCES supply.tblSupplies(idSupply)
@@ -314,7 +314,7 @@ CREATE TABLE sales.tblSalesChecks(
 	CONSTRAINT fkSalesCheck_Client
 	FOREIGN KEY (idClient) REFERENCES sales.tblClients(idClient),
 	CONSTRAINT fkSalesCheck_CaiCodeRange
-	FOREIGN KEY (idCaiCodeRange) REFERENCES sales.tblCaiCodeRanges(idCaiCodeRange)
+	FOREIGN KEY (idCaiCodeRange) REFERENCES sales.tblCaiCodeRanges(idCaiCodeRange),
 );
 
 CREATE TABLE sales.tblSalesChecksDetails(
@@ -341,17 +341,21 @@ CREATE TABLE orders.tblProviders(
 CREATE TABLE orders.tblSupplyPurcharses(
 	idSupplyPurcharse INTEGER PRIMARY KEY IDENTITY,
 	idUser INTEGER NOT NULL,
-	generationDate DATE NOT NULL DEFAULT GETDATE(),
+	generationDate DATETIME NOT NULL DEFAULT GETDATE(),
+	entryDate DATETIME,
 	subTotal DECIMAL(8,2) NOT NULL,
 	idProvider INTEGER NOT NULL,
 	ISV DECIMAL(8,2) NOT NULL, 
 	idStatus INTEGER NOT NULL DEFAULT 2,
+	idFormerSupplyPurcharse INTEGER
 	CONSTRAINT fkSupplyPurcharse_User
 	FOREIGN KEY (idUser) REFERENCES users.tblUsers(idUser),
 	CONSTRAINT fkSupplyPurcharse_Provider
 	FOREIGN KEY (idProvider) REFERENCES orders.tblProviders(idProvider),
 	CONSTRAINT fkSupplyPurcharse_Status
-	FOREIGN KEY (idStatus) REFERENCES asset.tblStatus(idStatus)
+	FOREIGN KEY (idStatus) REFERENCES asset.tblStatus(idStatus),
+	CONSTRAINT fkSupplyPurcharse_FormerSupplyPurcharse
+	FOREIGN KEY (idFormerSupplyPurcharse) REFERENCES orders.tblSupplyPurcharses(idSupplyPurcharse)
 );
 
 CREATE TABLE orders.tblSupplyPurcharseDetails(
@@ -368,18 +372,16 @@ CREATE TABLE orders.tblSupplyPurcharseDetails(
 GO
 ---------------------------------- TRIGGERS -------------------------------------
 
-----PRODUCT BATCHES----
---CREATE OR ALTER TRIGGER stock.trgSendNotificationForProductOrderPoint
---ON stock.tblProductBatches
---AFTER UPDATE
---AS
---BEGIN
---	SELECT * FROM inserted;
-	
---END
-
-
-
+CREATE OR ALTER TRIGGER asset.trgAddSysAdminPermissions
+ON asset.tblActions
+AFTER INSERT
+AS
+BEGIN
+	INSERT INTO users.tblActionRoles(idRole, idAction)
+	SELECT (SELECT idRole FROM users.tblUserRoles WHERE roleName = 'SYSADMIN'), idAction
+	FROM INSERTED
+END
+GO
 
 
 
