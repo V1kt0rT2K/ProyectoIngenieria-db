@@ -331,7 +331,10 @@ CREATE TABLE sales.tblordersWholesaler(
 	idOrderWholesaler INTEGER PRIMARY KEY IDENTITY,
 	idClient INTEGER NOT NULL,
 	idStatus INTEGER NOT NULL,
-	generationDate DATETIME DEFAULT GETDATE() ,
+	subTotal DECIMAL(8,2) NOT NULL,
+	ISV DECIMAL(8,2) NOT NULL,
+	generationDate DATETIME DEFAULT GETDATE(),
+	deliveryDate DATETIME,
 	CONSTRAINT fk_ordersWholesaler_Client
 	FOREIGN KEY (idClient) REFERENCES sales.tblClients(idClient),
 	CONSTRAINT fk_ordersWholesaler_Status
