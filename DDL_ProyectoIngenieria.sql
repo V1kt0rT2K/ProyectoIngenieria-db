@@ -327,6 +327,26 @@ CREATE TABLE sales.tblSalesChecksDetails(
 	CONSTRAINT fkSalesChecksDetail_Product
 	FOREIGN KEY (idProduct) REFERENCES stock.tblProducts(idProduct),
 );
+CREATE TABLE sales.tblordersWholesaler(
+	idOrderWholesaler INTEGER PRIMARY KEY IDENTITY,
+	idClient INTEGER NOT NULL,
+	idStatus INTEGER NOT NULL,
+	generationDate DATETIME DEFAULT GETDATE() ,
+	CONSTRAINT fk_ordersWholesaler_Client
+	FOREIGN KEY (idClient) REFERENCES sales.tblClients(idClient),
+	CONSTRAINT fk_ordersWholesaler_Status
+	FOREIGN KEY (idStatus) REFERENCES asset.tblStatus(idStatus)
+);
+CREATE TABLE sales.tblordersWholesalerDetails(
+	idOrderWholesalerDetail INTEGER PRIMARY KEY IDENTITY,
+	idOrderWholesaler INTEGER NOT NULL,
+	idProduct INTEGER NOT NULL,
+	quantity DECIMAL(8,2) NOT NULL,
+	CONSTRAINT fk_WholesalerDetails_OrderWholesaler
+	FOREIGN KEY (idOrderWholesaler) REFERENCES sales.tblordersWholesaler(idOrderWholesaler) ,
+	CONSTRAINT fk_WholesalerDetails_Product
+	FOREIGN KEY (idProduct) REFERENCES stock.tblProducts(idProduct)
+);
 
 
 ---------------- ORDERS ----------------
