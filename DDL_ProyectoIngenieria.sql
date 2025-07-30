@@ -209,6 +209,7 @@ CREATE TABLE stock.tblProductBatches(
 	idProductBatch INTEGER PRIMARY KEY IDENTITY,
 	idProduct INTEGER NOT NULL,
 	expirationDate DATE NOT NULL,
+	generationDate DATETIME DEFAULT GETDATE,
 	stockQuantity DECIMAL(8,2) NOT NULL,
 	idSwineBatch INTEGER NOT NULL,
 	entryQuantity DECIMAL(8,2) NOT NULL,
@@ -333,6 +334,29 @@ CREATE TABLE sales.tblSalesChecksDetails(
 	FOREIGN KEY (idSalesCheck) REFERENCES sales.tblSalesChecks(idSalesCheck),
 	CONSTRAINT fkSalesChecksDetail_Product
 	FOREIGN KEY (idProduct) REFERENCES stock.tblProducts(idProduct),
+);
+CREATE TABLE sales.tblordersWholesaler(
+	idOrderWholesaler INTEGER PRIMARY KEY IDENTITY,
+	idClient INTEGER NOT NULL,
+	idStatus INTEGER NOT NULL,
+	subTotal DECIMAL(8,2) NOT NULL,
+	ISV DECIMAL(8,2) NOT NULL,
+	generationDate DATETIME DEFAULT GETDATE(),
+	deliveryDate DATETIME,
+	CONSTRAINT fk_ordersWholesaler_Client
+	FOREIGN KEY (idClient) REFERENCES sales.tblClients(idClient),
+	CONSTRAINT fk_ordersWholesaler_Status
+	FOREIGN KEY (idStatus) REFERENCES asset.tblStatus(idStatus)
+);
+CREATE TABLE sales.tblordersWholesalerDetails(
+	idOrderWholesalerDetail INTEGER PRIMARY KEY IDENTITY,
+	idOrderWholesaler INTEGER NOT NULL,
+	idProduct INTEGER NOT NULL,
+	quantity DECIMAL(8,2) NOT NULL,
+	CONSTRAINT fk_WholesalerDetails_OrderWholesaler
+	FOREIGN KEY (idOrderWholesaler) REFERENCES sales.tblordersWholesaler(idOrderWholesaler) ,
+	CONSTRAINT fk_WholesalerDetails_Product
+	FOREIGN KEY (idProduct) REFERENCES stock.tblProducts(idProduct)
 );
 
 

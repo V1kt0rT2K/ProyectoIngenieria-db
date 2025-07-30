@@ -226,6 +226,19 @@ VALUES ('TecnoImport S.A.', '0801-2010-12345', 'contacto@tecnoimport.hn', 'ETC')
 		('Distribuidora La Abundancia', '1201-2005-54321', 'ventas@abundancia.hn', 'ETC'),
 		('CargoExpress Honduras', '1001-2015-45678', 'servicio@cargoexpress.hn', 'ETC');
 GO
+--pedido de cliente mayorista pediente	
+INSERT INTO sales.tblordersWholesaler(idClient,idStatus,subTotal ,ISV)
+VALUES(2,8,10000,2500);
+GO
+INSERT INTO sales.tblordersWholesalerDetails(idOrderWholesaler,idProduct,quantity )
+VALUES(1,12,10);
+GO
+--pedido de cliente mayorista Finalizado
+INSERT INTO sales.tblordersWholesaler(idClient,idStatus,subTotal ,ISV ,deliveryDate)
+VALUES(2,9,17000,3500,'2025-07-25 00:31:45.853');
+GO
+INSERT INTO sales.tblordersWholesalerDetails(idOrderWholesaler,idProduct,quantity )
+VALUES(2,12,20);
 
 INSERT INTO orders.tblSupplyPurcharses(idUser, subTotal,idProvider,ISV,idStatus, idFormerSupplyPurcharse)
 VALUES	(1,1000, 1, 231, 1, null),
