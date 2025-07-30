@@ -9,6 +9,7 @@ VALUES	('Estados de Solicitud'),
 		('Estados de Pedido de Venta');
 GO
 
+-----DEJAR LA SUCESION DE LOS INSERTS DE STATUS RESPECTO A LA PROGRESION DE CADA UNO
 INSERT INTO asset.tblStatus(statusName, statusDescription, idStatusType)
 VALUES	('Aprobado','La solicitud fue revisada y aprobada con éxito.', 1),
 		('Revisión','La solicitud esta pendiente de revisión.', 1),			------DEJAR SIEMPRE EL ESTADO REVISION COMO SEGUNDO
@@ -65,8 +66,8 @@ VALUES	('viktor.hernandez@gmail.com','SYSADMIN', 'cdcb7422ca0fe077931b84e6fb7e6d
 		('administrador@gmail.com','ADMINISTRADOR', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 1,2,1),
 		('cajero@gmail.com','CAJERO', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 1,3,2),
 		('almacen@gmail.com','ENCARGADO DE ALMACEN', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 1,4,3),
-		('ventas@gmail.com','ENCARGADO DE VENTAS', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 1,1,5),
-		('granja@gmail.com','OPERADOR DE GRANJA', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 1,1,6);
+		('ventas@gmail.com','ENCARGADO DE VENTAS', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 1,5,5),
+		('granja@gmail.com','OPERADOR DE GRANJA', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 1,6,6);
 GO
 
 INSERT INTO users.tblUserRolesHistoric(idUser, oldRoleId, newRoleId)
@@ -189,19 +190,24 @@ VALUES	(1,'000-007-01-00000056','000-007-01-00000065', DATEADD(MONTH,1,GETDATE()
 GO
 
 
-INSERT INTO sales.tblClients(identification, fullName, contact, address)
-VALUES	('000', 'CLIENTE FINAL',NULL, NULL),
-		('0801198300332', 'MARIO GALDAMEZ', '99093413', 'RES. FRANCISCO MORAZAN'),
-		('0715200100923', 'JULIA RAMOS',NULL,NULL),
-		('0101200600003', 'REPUESTOS LA META',NULL,NULL),
-		('0801200567890', 'INVERSIONES KORIUM',NULL,'CHOLOMA');
+INSERT INTO sales.tblClientTypes(clientTypeName)
+VALUES	('Minorista'),
+		('Mayorista');
+GO
+
+INSERT INTO sales.tblClients(identification, fullName, contact, address, idClientType)
+VALUES	('000', 'CLIENTE FINAL',NULL, NULL, 1),
+		('0801198300332', 'MARIO GALDAMEZ', '99093413', 'RES. FRANCISCO MORAZAN', 1),
+		('0715200100923', 'JULIA RAMOS',NULL,NULL, 1),
+		('0101200600003', 'REPUESTOS LA META',NULL,NULL, 2),
+		('0801200567890', 'INVERSIONES KORIUM',NULL,'CHOLOMA', 2);
 GO
 
 INSERT INTO sales.tblSalesChecks(idUser,subTotal,ISV,idClient, idCaiCodeRange, saleCheckCode)
 VALUES	(1,32982,1231,1, 1,'000-007-01-00000056'),
 		(1,43221,442,1, 1 , '000-007-01-00000057'),
-		(1,3242,1141,2, 1 , '000-007-01-00000058'),
-		(1,999,1341,3, 1 , '000-007-01-00000059');
+		(2,3242,1141,2, 1 , '000-007-01-00000058'),
+		(2,999,1341,3, 1 , '000-007-01-00000059');
 GO
 
 INSERT INTO sales.tblSalesChecksDetails(idSalesCheck,idProduct,quantity)

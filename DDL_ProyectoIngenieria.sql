@@ -272,6 +272,10 @@ CREATE TABLE supply.tblSwineSupplies(
 );
 
 -------------SALES-----------------
+CREATE TABLE sales.tblClientTypes(
+	idClientType INTEGER PRIMARY KEY IDENTITY,
+	clientTypeName NVARCHAR(MAX) NOT NULL
+);
 
 CREATE TABLE sales.tblCaiCodes(
 	idCaiCode INTEGER PRIMARY KEY IDENTITY,
@@ -297,7 +301,10 @@ CREATE TABLE sales.tblClients(
 	fullName NVARCHAR(MAX),
 	contact NVARCHAR(MAX),
 	address NVARCHAR(MAX),
+	idClientType INTEGER NOT NULL,
 	CONSTRAINT ukIdentityNumber UNIQUE(identification),
+	CONSTRAINT fkClient_ClientType
+	FOREIGN KEY (idClientType) REFERENCES sales.tblClientTypes(idClientType)
 );
 
 CREATE TABLE sales.tblSalesChecks(

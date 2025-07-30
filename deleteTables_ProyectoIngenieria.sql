@@ -29,6 +29,7 @@ DROP TABLE IF EXISTS stock.tblProducts;
 DROP TABLE IF EXISTS users.tblUsers;
 
 -- 3. Tablas principales (más "padres")
+DROP TABLE IF EXISTS sales.tblClientTypes;
 DROP TABLE IF EXISTS sales.tblClients;
 DROP TABLE IF EXISTS sales.tblCaiCodes;
 DROP TABLE IF EXISTS orders.tblProviders;
@@ -41,6 +42,7 @@ DROP TABLE IF EXISTS users.tblPersons;
 DROP TABLE IF EXISTS asset.tblStageTypes;
 DROP TABLE IF EXISTS asset.tblStatusTypes;
 DROP TABLE IF EXISTS asset.tblActions;
+
 
 --DROP TRIGGER IF EXISTS asset.trgAddSysAdminPermissions;
 
