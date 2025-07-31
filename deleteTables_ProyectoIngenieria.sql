@@ -8,6 +8,7 @@ GO
 -- Eliminar tablas en orden inverso a sus dependencias
 
 -- 1. Tablas con más dependencias (más "hijas") primero
+DROP TABLE IF EXISTS sales.tblordersWholesalerDetails;
 DROP TABLE IF EXISTS orders.tblSupplyPurcharseDetails;
 DROP TABLE IF EXISTS sales.tblSalesChecksDetails;
 DROP TABLE IF EXISTS supply.tblSwineSupplies;
@@ -22,6 +23,7 @@ DROP TABLE IF EXISTS asset.tblNotifications;
 -- 2. Tablas intermedias
 DROP TABLE IF EXISTS orders.tblSupplyPurcharses;
 DROP TABLE IF EXISTS sales.tblSalesChecks;
+DROP TABLE IF EXISTS sales.tblordersWholesaler;
 DROP TABLE IF EXISTS sales.tblCaiCodeRanges;
 DROP TABLE IF EXISTS supply.tblSupplies;
 DROP TABLE IF EXISTS stock.tblSwineBatches;
@@ -29,8 +31,8 @@ DROP TABLE IF EXISTS stock.tblProducts;
 DROP TABLE IF EXISTS users.tblUsers;
 
 -- 3. Tablas principales (más "padres")
-DROP TABLE IF EXISTS sales.tblClientTypes;
 DROP TABLE IF EXISTS sales.tblClients;
+DROP TABLE IF EXISTS sales.tblClientTypes;
 DROP TABLE IF EXISTS sales.tblCaiCodes;
 DROP TABLE IF EXISTS orders.tblProviders;
 DROP TABLE IF EXISTS supply.tblSupplyTypes;

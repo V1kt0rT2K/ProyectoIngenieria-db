@@ -209,7 +209,7 @@ CREATE TABLE stock.tblProductBatches(
 	idProductBatch INTEGER PRIMARY KEY IDENTITY,
 	idProduct INTEGER NOT NULL,
 	expirationDate DATE NOT NULL,
-	generationDate DATETIME DEFAULT GETDATE,
+	generationDate DATETIME DEFAULT GETDATE(),
 	stockQuantity DECIMAL(8,2) NOT NULL,
 	idSwineBatch INTEGER NOT NULL,
 	entryQuantity DECIMAL(8,2) NOT NULL,
