@@ -366,7 +366,8 @@ CREATE TABLE orders.tblProviders(
 	providerName NVARCHAR(MAX) NOT NULL,
 	RTN NVARCHAR(MAX) NOT NULL,
 	providerContact NVARCHAR(MAX) NOT NULL,
-	location NVARCHAR(MAX) NOT NULL
+	location NVARCHAR(MAX) NOT NULL,
+	isEnabled BIT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE orders.tblSupplyPurcharses(
