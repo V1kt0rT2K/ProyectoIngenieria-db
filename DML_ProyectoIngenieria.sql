@@ -91,7 +91,7 @@ INSERT INTO asset.tblActions(actionName)
 VALUES	('getAllProducts'),('searchProduct'),('createProduct');
 GO
 INSERT INTO asset.tblActions(actionName)
-VALUES	('getAllSwineBatch'),('getSwineBatchByIdStage'),('getSwineBatchById'),('createSwineBatch');
+VALUES	('getAllSwineBatch'),('getSwineBatchByIdStage'),('getSwineBatchById'),('createSwineBatch'),('updateSwineBatchStage');
 GO
 
 ---------------------------- SUPPLY ROUTES -------------------------------
@@ -184,7 +184,9 @@ GO
 
 -------------------------- ENCARGADO DE ALMACEN -----------------------------------------------
 INSERT INTO users.tblActionRoles(idRole,idAction) 
-VALUES	((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'checkNotification')),
+VALUES	((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllStages')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getStageById')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'checkNotification')),
 		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllNotificationsForUser')),
 		-----PROVIDERS---
 		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllProviders')),
@@ -227,7 +229,9 @@ VALUES	((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Al
 		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'searchProductBatch')),
 		----SWINE BATCH-----
 		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllSwineBatch')),
-		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSwineBatchByIdStage'));
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSwineBatchByIdStage')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSwineBatchById')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'updateSwineBatchStage'));
 GO
 
 -------------------------- ENCARGADO DE VENTAS  -----------------------------------------------
@@ -280,6 +284,7 @@ VALUES	((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Gra
 		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSwineBatchByIdStage')),
 		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSwineBatchById')),
 		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'createSwineBatch')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'updateSwineBatchStage')),
 		----SWINE SUPPLY-----
 		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllSwineSupply')),
 		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllSwineSupplybyidSwineBatch')),
