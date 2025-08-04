@@ -415,6 +415,28 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER TRIGGER sales.trgUpdateCaiCode
+ON sales.tblSalesChecks
+AFTER INSERT
+AS
+BEGIN
+	DECLARE @idCaiCodeRange INTEGER = (SELECT TOP 1 idCaiCodeRange FROM inserted);
+	DECLARE @startRange INTEGER;
+	DECLARE @endRange INTEGER;
+	DECLARE @salesCount INTEGER = (SELECT COUNT(idSalesCheck) FROM sales.tblSalesChecks WHERE idCaiCodeRange = @idCaiCodeRange);
+
+	SET @startRange = CONVERT(INTEGER,SUBSTRING((SELECT startRange FROM sales.tblCaiCodeRanges WHERE idCaiCodeRange = @idCaiCodeRange),12,10));
+	SET @endRange = CONVERT(INTEGER,SUBSTRING((SELECT endRange FROM sales.tblCaiCodeRanges WHERE idCaiCodeRange = @idCaiCodeRange),12,10));
+
+	IF(@salesCount >= (@endRange - @startRange + 1))
+	BEGIN
+		UPDATE sales.tblCaiCodeRanges 
+		SET isActive = 0
+		WHERE idCaiCodeRange = @idCaiCodeRange
+	END
+END
+GO
+
 
 
 

@@ -64,10 +64,10 @@ VALUES	('0715200500005','VIKTOR', 'ANDRE','HERNANDEZ', 'VELASQUEZ'),
 INSERT INTO users.tblUsers(email,job,password,isEnabled,idPerson,idRole)
 VALUES	('viktor.hernandez@gmail.com','SYSADMIN', 'cdcb7422ca0fe077931b84e6fb7e6dfb7d6678dc7e9ae9c4335e98edc7d5761a', 1,1,4),
 		('administrador@gmail.com','ADMINISTRADOR', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 1,2,1),
-		('cajero@gmail.com','CAJERO', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 1,3,2),
+		('cajero@gmail.com','CAJERO', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 0,3,2),
 		('almacen@gmail.com','ENCARGADO DE ALMACEN', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 1,4,3),
 		('ventas@gmail.com','ENCARGADO DE VENTAS', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 1,5,5),
-		('granja@gmail.com','OPERADOR DE GRANJA', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 1,6,6);
+		('granja@gmail.com','OPERADOR DE GRANJA', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 0,6,6);
 GO
 
 INSERT INTO users.tblUserRolesHistoric(idUser, oldRoleId, newRoleId)
@@ -76,10 +76,12 @@ VALUES	(1,2,3),
 		(2,3,2);
 
 INSERT INTO users.tblUserRequests(idUser,idRole,idStatus, userName,email,job)
-VALUES	(1,2,1,'VIKTOR HERNANDEZ','viktor.hernandez@gmail.com', 'GERENTE'),
-		(2,3,2,'FULANO DE TAL', 'fulano@gmail.com', 'CAJERO'),
-		(3,3,2,'FULANO DE TAL', 'fulano@gmail.com', 'CAJERO'),
-		(4,3,2,'FULANO DE TAL', 'fulano@gmail.com', 'CAJERO');
+VALUES	(1,4,1,'VIKTOR HERNANDEZ','viktor.hernandez@gmail.com', 'SYSADMIN'),
+		(2,1,1,'MARIA GONZALEZ HERNANDEZ VELASQUEZ', 'administrador@gmail.com', 'ADMINISTRADOR'),
+		(3,2,2,'JUAN MANUEL MENGANO VELASQUEZ', 'cajero@gmail.com', 'CAJERO'),
+		(4,3,1,'FULANO DETAL HERNANDEZ VELASQUEZ', 'almacen@gmail.com', 'ENCARGADO DE ALMACEN'),
+		(5,5,1,'PEDRO ARMANDO HERNANDEZ VELASQUEZ', 'ventas@gmail.com', 'ENCARGADO DE VENTAS'),
+		(6,6,3,'MENGANO DETAL HERNANDEZ VELASQUEZ', 'granja@gmail.com', 'OPERADOR DE GRANJA');
 GO
 ----------- TEST INSERTS -----------
 
@@ -89,7 +91,7 @@ VALUES	(10,'2025-07-25 00:31:45.853',2, 5),
 GO
 
 INSERT INTO stock.tblProducts(productName,productDescription, price, orderPoint)
-VALUES	('Cabeza', 'Incluye orejas, morro, cachetes y cabeza completa para caldos o barbacoa', 200, 5),
+VALUES	('Cabeza', 'Incluye orejas, morro, cachetes y cabeza completa para caldos o barbacoa', 50, 5),
 		('Lomo', 'Corte magro y tierno, ideal para chuletas, filetes o asar entero', 29, 5),
 		('Costilla', 'Incluye las costillas (chuletas) con hueso, para parrilla o ahumados', 37, 5),
 		('Pierna', 'También llamada jamón, usado para asar, curar o hacer jamones serranos', 56, 5),
@@ -100,7 +102,7 @@ VALUES	('Cabeza', 'Incluye orejas, morro, cachetes y cabeza completa para caldos
 		('Espaldilla', 'Corte económico de la parte superior delantera', 50, 5),
 		('Rabo', 'Usado principalmente para guisos y caldos', 11, 7),
 		('Chicharrón', 'Piel de cerdo frita o asada', 20, 5),
-		('Cerdo', 'Unidad de cerdo entero para la venta.', 1000, 5);
+		('Cerdo', 'Unidad de cerdo entero para la venta.', 35, 100);
 GO
 
 INSERT INTO stock.tblProductBatches(stockQuantity,idProduct,expirationDate,idSwineBatch, entryQuantity)	--Numero aleatorio entre 1 y 30 para la cantidad
@@ -113,10 +115,9 @@ SELECT TOP 3 ROUND(1 + RAND(idProduct)*29, 2), idProduct, DATEADD(DAY, FLOOR(15 
 FROM stock.tblProducts;
 GO
 
---INSERT INTO stock.tblProductions(idSwineBatch,idProduct,quantity)
---SELECT 2, sct.idProduct, ROUND(1 + RAND(sct.idProduct)*15, 2)
---FROM stock.tblProducts AS sct;
---GO
+INSERT INTO stock.tblProductBatches(stockQuantity,idProduct,expirationDate,idSwineBatch, entryQuantity)	--Numero aleatorio entre 1 y 30 para la cantidad
+VALUES (478.98,12,'2025-12-01', 1, 600);
+GO
 
 INSERT INTO supply.tblSupplyTypes(nameSupplyType)
 VALUES	('Desparasitantes'),
