@@ -45,11 +45,247 @@ VALUES	('Administrador', 'Usuario encargado de supervisar el sistema.' , 0),
 		('Operador de Granja', 'Usuario que realiza la gestión con los lotes de cerdos.' , 1)
 GO
 
+-----------INSERTS PARA ACCESOS A LAS RUTAS DEL BACKEND ------------------------
 
+---- --------------ASSET ROUTES -------------
 INSERT INTO asset.tblActions(actionName)
-VALUES	('getAllUsers'),
-		('searchUsers'),
-		('updateUser');
+VALUES	('checkNotification'),('getAllNotificationsForUser');
+GO
+INSERT INTO asset.tblActions(actionName)
+VALUES	('getAllStages'),('getStageById');
+GO
+INSERT INTO asset.tblActions(actionName)
+VALUES	('getAllStatus'),('getStatusForPurcharses'),('getStatusForUserRequests'),('getStatusByIdStatusType');
+GO
+
+----------------- ORDERS ROUTES--------------------------
+INSERT INTO asset.tblActions(actionName)
+VALUES	('getAllProviders'),('registerProvider'),('getProviderById'),('updateProvider'),
+		('updateProviderEnabledStatus'),('deleteProvider'),('searchProvider');
+GO
+INSERT INTO asset.tblActions(actionName)
+VALUES	('getAllSupplyPurcharses'),('getAllSupplyPurcharsesByIdStatus'),('getSupplyPurcharseById'),('generatePurcharse'),
+		('enterSupplyPurcharse'),('updatePurcharseStatus'),('approveOrRejectSupplyPurcharse');
+GO
+
+------------ SALES ROUTES ---------------------------
+INSERT INTO asset.tblActions(actionName)
+VALUES	('generateNewRange'),('getAllRangesByActiveStatus');
+GO
+INSERT INTO asset.tblActions(actionName)
+VALUES	('getClientTypes'),('getClients'),('registerClient'),('searchClients');
+GO
+INSERT INTO asset.tblActions(actionName)
+VALUES	('getOrdersWholesaler'),('getOrderWholesalerById');
+GO
+INSERT INTO asset.tblActions(actionName)
+VALUES	('getSalesCheckById'),('searchSalesCheckForUser'),('searchSalesCheck'),('getAllSalesChecks'),
+		('getAllSalesChecksForUser'),('generateSalesCheck');
+GO
+
+--------------------------- STOCK ROUTES ------------------------------
+INSERT INTO asset.tblActions(actionName)
+VALUES	('getAllProductBatches'),('createProductBatch'),('searchProductBatch');
+GO
+INSERT INTO asset.tblActions(actionName)
+VALUES	('getAllProducts'),('searchProduct'),('createProduct');
+GO
+INSERT INTO asset.tblActions(actionName)
+VALUES	('getAllSwineBatch'),('getSwineBatchByIdStage'),('getSwineBatchById'),('createSwineBatch');
+GO
+
+---------------------------- SUPPLY ROUTES -------------------------------
+INSERT INTO asset.tblActions(actionName)
+VALUES	('getAllSupplyBatches'),('getSupplyBatchById'),('getSupplyBatchesByIdType'),('getSupplyBatchesNearExpiration'),
+		('updateStckSupplyBatch'),('searchSupplyBatch'),('searchSupplyBatchByType');
+GO
+INSERT INTO asset.tblActions(actionName)
+VALUES	('getAllSupplies'),('getSupplyById'),('getSupplyByType'),('getSupplyByStage');
+GO
+INSERT INTO asset.tblActions(actionName)
+VALUES	('getAllSwineSupply'),('getAllSwineSupplybyidSwineBatch'),('createSwineSupply');
+GO
+
+------------------------- USERS ROUTES -----------------------------------
+INSERT INTO asset.tblActions(actionName)
+VALUES	('getAllRequests'),('getUserRequestsByIdUser'),('getUserRequestById'),('getUserRequestsByIdStatus'),('manageUserRequest');
+GO
+INSERT INTO asset.tblActions(actionName)
+VALUES	('getAllRolesForAdmin'),('updateUserRole');
+GO
+INSERT INTO asset.tblActions(actionName)
+VALUES	('updateUser'),('updateEnabledStatus'),('getAllUsers'),('getUserById'),('searchUsers');
+GO
+
+---------------------------------ASIGNACION DE ROLES ------------------------------------------
+
+-------------------------- ADMINISTRADOR -----------------------------------------------
+INSERT INTO users.tblActionRoles(idRole,idAction) 
+VALUES	((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllRequests')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getUserRequestsByIdUser')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getUserRequestById')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getUserRequestsByIdStatus')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'manageUserRequest')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllRolesForAdmin')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'updateUserRole')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'updateUser')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'updateEnabledStatus')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllUsers')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getUserById')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'searchUsers')),
+		----CLIENTS -------
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getClientTypes')),
+		------SALES
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSalesCheckById')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'searchSalesCheck')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllSalesChecks')),
+		-----PROVIDERS---
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllProviders')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'registerProvider')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getProviderById')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'updateProvider')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'updateProviderEnabledStatus')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'deleteProvider')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'searchProvider')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'checkNotification')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllNotificationsForUser')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllStatus')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getStatusForPurcharses')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getStatusForUserRequests')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getStatusByIdStatusType')),
+		----PURCHARSES -----------
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllSupplyPurcharses')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllSupplyPurcharsesByIdStatus')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSupplyPurcharseById')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'approveOrRejectSupplyPurcharse')),
+		---CAI CODES ------
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'generateNewRange')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Administrador'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllRangesByActiveStatus'));
+GO
+
+
+-------------------------- CAJERO -----------------------------------------------
+INSERT INTO users.tblActionRoles(idRole,idAction) 
+VALUES	((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Cajero'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'checkNotification')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Cajero'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllNotificationsForUser')),
+		----CLIENTS -------
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Cajero'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getClientTypes')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Cajero'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getClients')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Cajero'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'registerClient')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Cajero'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'searchClients')),
+		------SALES
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Cajero'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSalesCheckById')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Cajero'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'searchSalesCheckForUser')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Cajero'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllSalesChecksForUser')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Cajero'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'generateSalesCheck')),
+		-----PRODUCTS---
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Cajero'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllProducts'));
+GO
+
+-------------------------- ENCARGADO DE ALMACEN -----------------------------------------------
+INSERT INTO users.tblActionRoles(idRole,idAction) 
+VALUES	((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'checkNotification')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllNotificationsForUser')),
+		-----PROVIDERS---
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllProviders')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'registerProvider')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getProviderById')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'updateProvider')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'updateProviderEnabledStatus')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'deleteProvider')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'searchProvider')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllStatus')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getStatusForPurcharses')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getStatusByIdStatusType')),
+		----PURCHARSES -----------
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllSupplyPurcharses')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllSupplyPurcharsesByIdStatus')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSupplyPurcharseById')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'generatePurcharse')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'enterSupplyPurcharse')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'updatePurcharseStatus')),
+		----SUPPLIES -----------
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllSupplies')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSupplyById')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSupplyByType')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSupplyByStage')),
+		----SUPPLY BATCHES -----------
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllSupplyBatches')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSupplyBatchById')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSupplyBatchesByIdType')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSupplyBatchesNearExpiration')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'updateStckSupplyBatch')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'searchSupplyBatch')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'searchSupplyBatchByType')),
+		---- PRODUCTS ----------
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllProducts')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'searchProduct')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'createProduct')),
+		----PRODUCT BATCHES -----------
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllProductBatches')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'createProductBatch')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'searchProductBatch')),
+		----SWINE BATCH-----
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllSwineBatch')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Almacén'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSwineBatchByIdStage'));
+GO
+
+-------------------------- ENCARGADO DE VENTAS  -----------------------------------------------
+INSERT INTO users.tblActionRoles(idRole,idAction) 
+VALUES	((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Ventas'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'checkNotification')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Ventas'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllNotificationsForUser')),
+		----CLIENTS -------
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Ventas'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getClientTypes')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Ventas'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getClients')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Ventas'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'registerClient')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Ventas'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'searchClients')),
+		------SALES
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Ventas'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSalesCheckById')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Ventas'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'searchSalesCheckForUser')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Ventas'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllSalesChecksForUser')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Ventas'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'generateSalesCheck')),
+		-----PRODUCTS---
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Encargado de Ventas'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllProducts'));
+GO
+
+-------------------------- OPERADOR DE GRANJA -----------------------------------------------
+INSERT INTO users.tblActionRoles(idRole,idAction) 
+VALUES	((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllStages')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getStageById')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'checkNotification')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllNotificationsForUser')),
+		----SUPPLIES -----------
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllSupplies')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSupplyById')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSupplyByType')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSupplyByStage')),
+		----SUPPLY BATCHES -----------
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllSupplyBatches')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSupplyBatchById')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSupplyBatchesByIdType')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSupplyBatchesNearExpiration')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'updateStckSupplyBatch')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'searchSupplyBatch')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'searchSupplyBatchByType')),
+		---- PRODUCTS ----------
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllProducts')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'searchProduct')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'createProduct')),
+		----PRODUCT BATCHES -----------
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllProductBatches')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'createProductBatch')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'searchProductBatch')),
+		----SWINE BATCH-----
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllSwineBatch')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSwineBatchByIdStage')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getSwineBatchById')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'createSwineBatch')),
+		----SWINE SUPPLY-----
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllSwineSupply')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'getAllSwineSupplybyidSwineBatch')),
+		((SELECT idRole FROM users.tblUserRoles WHERE roleName = 'Operador de Granja'),(SELECT idAction FROM asset.tblActions WHERE actionName = 'createSwineSupply'));
+GO
+
 
 --------USERS INSERTS ----------
 
@@ -64,10 +300,10 @@ VALUES	('0715200500005','VIKTOR', 'ANDRE','HERNANDEZ', 'VELASQUEZ'),
 INSERT INTO users.tblUsers(email,job,password,isEnabled,idPerson,idRole)
 VALUES	('viktor.hernandez@gmail.com','SYSADMIN', 'cdcb7422ca0fe077931b84e6fb7e6dfb7d6678dc7e9ae9c4335e98edc7d5761a', 1,1,4),
 		('administrador@gmail.com','ADMINISTRADOR', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 1,2,1),
-		('cajero@gmail.com','CAJERO', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 0,3,2),
+		('cajero@gmail.com','CAJERO', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 1,3,2),
 		('almacen@gmail.com','ENCARGADO DE ALMACEN', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 1,4,3),
 		('ventas@gmail.com','ENCARGADO DE VENTAS', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 1,5,5),
-		('granja@gmail.com','OPERADOR DE GRANJA', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 0,6,6);
+		('granja@gmail.com','OPERADOR DE GRANJA', 'cea115f6db0fcae5bc6b1148d07249e446d0e295382fb562e6ca4d7a354525fe', 1,6,6);
 GO
 
 INSERT INTO users.tblUserRolesHistoric(idUser, oldRoleId, newRoleId)
@@ -78,10 +314,10 @@ VALUES	(1,2,3),
 INSERT INTO users.tblUserRequests(idUser,idRole,idStatus, userName,email,job)
 VALUES	(1,4,1,'VIKTOR HERNANDEZ','viktor.hernandez@gmail.com', 'SYSADMIN'),
 		(2,1,1,'MARIA GONZALEZ HERNANDEZ VELASQUEZ', 'administrador@gmail.com', 'ADMINISTRADOR'),
-		(3,2,2,'JUAN MANUEL MENGANO VELASQUEZ', 'cajero@gmail.com', 'CAJERO'),
+		(3,2,1,'JUAN MANUEL MENGANO VELASQUEZ', 'cajero@gmail.com', 'CAJERO'),
 		(4,3,1,'FULANO DETAL HERNANDEZ VELASQUEZ', 'almacen@gmail.com', 'ENCARGADO DE ALMACEN'),
 		(5,5,1,'PEDRO ARMANDO HERNANDEZ VELASQUEZ', 'ventas@gmail.com', 'ENCARGADO DE VENTAS'),
-		(6,6,3,'MENGANO DETAL HERNANDEZ VELASQUEZ', 'granja@gmail.com', 'OPERADOR DE GRANJA');
+		(6,6,1,'MENGANO DETAL HERNANDEZ VELASQUEZ', 'granja@gmail.com', 'OPERADOR DE GRANJA');
 GO
 ----------- TEST INSERTS -----------
 
@@ -102,7 +338,7 @@ VALUES	('Cabeza', 'Incluye orejas, morro, cachetes y cabeza completa para caldos
 		('Espaldilla', 'Corte económico de la parte superior delantera', 50, 5),
 		('Rabo', 'Usado principalmente para guisos y caldos', 11, 7),
 		('Chicharrón', 'Piel de cerdo frita o asada', 20, 5),
-		('Cerdo', 'Unidad de cerdo entero para la venta.', 35, 100);
+		('Cerdo', 'Libra de cerdo para la venta.', 35, 100);
 GO
 
 INSERT INTO stock.tblProductBatches(stockQuantity,idProduct,expirationDate,idSwineBatch, entryQuantity)	--Numero aleatorio entre 1 y 30 para la cantidad
@@ -122,8 +358,7 @@ GO
 INSERT INTO supply.tblSupplyTypes(nameSupplyType)
 VALUES	('Desparasitantes'),
 		('Vitaminas'),
-		('Concentrado'),
-		('Herramientas');
+		('Concentrado');
 GO
 
 INSERT INTO supply.tblSupplies(nameSupply,idSupplyType,idStage, orderPoint, price)
@@ -268,10 +503,10 @@ VALUES
     (4, 27, 5);   -- 5 unidades de Fibra control desarrollo (Precio: 40 c/u → Subtotal: 200)
 GO
 
-INSERT INTO asset.tblNotifications(message, idUser)
-VALUES	('EL INSUMO VACUNAS NECESITA UNA REORDEN',1),
-		('EL INSUMO VACUNAS NECESITA UNA REORDEN',4),
-		('EL INSUMO DESPARASITANTES NECESITA UNA REORDEN',4),
-		('EL INSUMO DESPARASITANTES NECESITA UNA REORDEN',1),
-		('EL INSUMO VITAMINAS NECESITA UNA REORDEN',1);
-GO
+--INSERT INTO asset.tblNotifications(message, idUser)
+--VALUES	('EL INSUMO VACUNAS NECESITA UNA REORDEN',1),
+--		('EL INSUMO VACUNAS NECESITA UNA REORDEN',4),
+--		('EL INSUMO DESPARASITANTES NECESITA UNA REORDEN',4),
+--		('EL INSUMO DESPARASITANTES NECESITA UNA REORDEN',1),
+--		('EL INSUMO VITAMINAS NECESITA UNA REORDEN',1);
+--GO

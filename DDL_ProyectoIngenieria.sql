@@ -295,7 +295,6 @@ CREATE TABLE sales.tblCaiCodeRanges(
 	FOREIGN KEY (idCaiCode) REFERENCES sales.tblCaiCodes(idCaiCode)
 );
 
-
 CREATE TABLE sales.tblClients(
     idClient INTEGER PRIMARY KEY IDENTITY,
 	identification NVARCHAR(50) NOT NULL,
@@ -316,13 +315,14 @@ CREATE TABLE sales.tblSalesChecks(
 	ISV DECIMAL(8,2) NOT NULL,
 	idClient INTEGER,
 	idCaiCodeRange INTEGER NOT NULL,
-	saleCheckCode NVARCHAR(MAX) NOT NULL,
+	saleCheckCode NVARCHAR(19) NOT NULL,
 	CONSTRAINT fkSalesCheck_User
 	FOREIGN KEY (idUser) REFERENCES users.tblUsers(idUser),
 	CONSTRAINT fkSalesCheck_Client
 	FOREIGN KEY (idClient) REFERENCES sales.tblClients(idClient),
 	CONSTRAINT fkSalesCheck_CaiCodeRange
 	FOREIGN KEY (idCaiCodeRange) REFERENCES sales.tblCaiCodeRanges(idCaiCodeRange),
+	CONSTRAINT ukSaleCheckCode UNIQUE (saleCheckCode),
 );
 
 CREATE TABLE sales.tblSalesChecksDetails(
